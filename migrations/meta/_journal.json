@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710339374711,
+      "tag": "0000_thick_scarlet_witch",
+      "breakpoints": true
+    }
+  ]
+}
