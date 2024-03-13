@@ -1,37 +1,22 @@
-'use client'
+'use server'
 
-import { Calendar, SlotInfo, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
+import { db } from '../../../lib/db'
+import { event } from '../../../lib/schemas'
+import { Calendar } from '../ui/calendar'
 
-const localizer = momentLocalizer(moment)
 
-export default function calendar() {
-    const myEventsList: {
-        title: string,
-        start: Date,
-        end: Date,
-        allDay?: boolean
-        resource?: any,
-    }[] = [
-            { title: "Test", end: new Date(), start: new Date(), allDay: false },
-            { title: "Test", end: new Date(), start: new Date(), allDay: true }
-        ]
 
-    const createEvent = (slotInfo: SlotInfo) => {
-        console.log({ slotInfo })
-    }
+export default async function calendar() {
+    const calendarEvents = await db.select({
+        id: event.id,
+        start: event.start,
+        end: event.end,
+        title: event.title,
+        allDay: event.allDay
+    }).from(event).orderBy(event.start)
+
     return (
-        <div>
-            <Calendar
-                localizer={localizer}
-                startAccessor="start"
-                endAccessor="end"
-                defaultView='week'
-                events={myEventsList}
-                style={{ height: "100vh" }}
-                onSelectSlot={createEvent}
-                selectable={true}
-            />
-        </div>
+        <Calendar calendarEvents={calendarEvents} />
     )
+
 }
