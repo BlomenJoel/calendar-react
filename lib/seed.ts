@@ -1,6 +1,6 @@
 import { exit } from 'node:process';
 import {
-event
+	event, goal, role, user
 } from './schemas';
 import { db, queryClient } from './db';
 import { getRandomDate } from './utils';
@@ -12,10 +12,15 @@ if (process.env.NODE_ENV !== 'development') {
 
 // Clear existing
 await db.delete(event);
+await db.delete(role)
+await db.delete(goal)
+await db.delete(user);
 
 // Generate entities
 type CalendarEvent = typeof event.$inferInsert;
-
+type User = typeof user.$inferInsert;
+type Role = typeof role.$inferInsert;
+type Goal = typeof goal.$inferInsert;
 
 const calendarEventsToInsert: CalendarEvent[] = [];
 
@@ -41,5 +46,19 @@ for (let index = 0; index < 500; index++) {
 }
 
 await db.insert(event).values(calendarEventsToInsert);
+
+// USER
+const newUser: User = {
+	id: crypto.randomUUID()
+};
+
+await db.insert(user).values(newUser)
+
+// ROLES
+const roles: Role[] = [{ title: "friend", userId: newUser.id! }, { title: "co-worker", userId: newUser.id! }]
+await db.insert(role).values(roles)
+// ROLES
+const goals: Goal[] = [{ title: "be a friend", userId: newUser.id! }, { title: "cooking a meal", userId: newUser.id! }]
+await db.insert(goal).values(goals)
 
 queryClient.end();

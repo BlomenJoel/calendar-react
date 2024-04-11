@@ -15,6 +15,20 @@
       "when": 1710340471666,
       "tag": "0001_acoustic_unus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712846167569,
+      "tag": "0002_mute_ronan",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1712846323298,
+      "tag": "0003_fair_mercury",
+      "breakpoints": true
     }
   ]
 }

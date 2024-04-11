@@ -23,5 +23,4 @@ export default async function calendar() {
     return (
         <Calendar calendarEvents={calendarEvents} createCalendarEvent={createCalendarEvent} />
     )
-
 }
