@@ -5,7 +5,7 @@ type Props = {
 
 export function ButtonPrimary({ title, onClick }: Props) {
     return (
-        <button onClick={onClick}>
+        <button className="border border-black px-4 py-1 text-sm rounded-md" onClick={onClick}>
             {title}
         </button>
     )

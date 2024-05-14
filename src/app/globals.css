@@ -30,4 +30,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  h1 {
+    @apply text-xl font-bold uppercase;
+  }
+  p { 
+    @apply text-sm text-gray-700;
+  }
 }

@@ -3,12 +3,18 @@
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { ProgressBar } from "../ui/progress-bar";
 import { createUserProfile } from "../actions/signup";
 import { useRouter } from "next/navigation";
+import { ProgressValues } from "../utils/types";
+
+const LAST_STEP = 3
 
 export default function SignUp() {
     const [goals, setGoals] = useState([""])
     const [roles, setRoles] = useState([""])
+    const [pms, setPMS] = useState("")
+    const [progress, setProgress] = useState<ProgressValues>("1/4")
     const [step, setStep] = useState(0)
 
     const router = useRouter()
@@ -23,34 +29,80 @@ export default function SignUp() {
     }
 
     const handleContinue = async () => {
-        if (step === 1) {
+        if (step === LAST_STEP) {
             await createUserProfile({ goals, roles })
             router.push("/calendar")
         } else {
             setStep(step + 1)
+            switch(step) {
+                case 0: 
+                    setProgress("2/4");
+                    return;
+                case 1: 
+                    setProgress("3/4");
+                    return;
+                case 2: 
+                case 3:
+                default: 
+                        setProgress("full");
+                        return;
+            }
         }
     }
 
     return (
-        <div>
+        <div className="w-1/2 mx-auto">
+        <div className="min-h-screen flex flex-col items-center justify-center gap-12">
             {step === 0 &&
-                <div className="w-44">
-                    <Button.Primary onClick={() => setGoals([...goals, ""])} title="Add goal" />
-                    <div className="flex flex-col">
-                        {goals.map((g, index) => <Input.Text key={index} label="Goals" value={g} setValue={(newVal) => handleSetGoalValues(newVal, index)} />)}
-                    </div>
-                    <Button.Primary onClick={handleContinue} title="Continue" />
+                <div className="flex flex-col gap-4 text-center">
+                    <h1>Varför finns den här kalendern?</h1>
+                    <p><i>"Genom att förlänga tiden mellan stimuli och respons får vi frihet"</i></p>
                 </div>
             }
-            {step === 1 && (
-                <div className="w-44">
-                    <Button.Primary onClick={() => setRoles([...roles, ""])} title="Add role" />
-                    <div className="flex flex-col">
-                        {roles.map((g, index) => <Input.Text key={index} label="Roles" value={g} setValue={(newVal) => handleSetRoleValues(newVal, index)} />)}
-                    </div>
-                    <Button.Primary onClick={handleContinue} title="Continue" />
-                </div>
+            {step === 1 &&
+                <div className="w-full">                 <div className="flex flex-col gap-4 text-center">
+ ¨                   <h1>Personal mission statement</h1>
+                     <p>Fyll i ditt PMS om du har ett! Annars går det bra att göra det senare.</p>
+                 </div>
+                 <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2">
+                     <Input.Text label="" value={pms} setValue={(newVal) => setPMS(newVal)} />
+                 </div>
+             </div>
+            }
+            {step === 2 &&
+                <div className="w-full">
+                                     <div className="flex flex-col gap-4 text-center">
+ ¨                   <h1>Roller</h1>
+                     <p>Vad är dina övergripliga roller?</p>
+                 </div>
+                 <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
+                     {roles.map((role, index) => <Input.Text key={index} label="" value={role} setValue={(newVal) => handleSetRoleValues(newVal, index)} />)}
+                     <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
+                         <Button.Primary onClick={() => setRoles([...roles, ""])} title="+" />
+                     </div>
+                 </div>
+             </div>
+            }
+            {step === 3 && (
+               <div className="w-full">
+               <div className="flex flex-col gap-4 text-center">
+¨                    <h1>Visioner och drömmer</h1>
+                   <p>Vad är dina övergripliga mål och vad strävar du efter?</p>
+               </div>
+               <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
+                   {goals.map((g, index) => <Input.Text key={index} label="" value={g} setValue={(newVal) => handleSetGoalValues(newVal, index)} />)}
+                   <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
+                       <Button.Primary onClick={() => setGoals([...goals, ""])} title="+" />
+                   </div>
+               </div>
+           </div>
             )}
+            <div className="ml-auto">
+
+            <Button.Primary onClick={handleContinue} title={LAST_STEP === step ? "Skapa profil" : "Nästa"} />
+            </div>
+            <ProgressBar progress={progress}/>
+        </div>
         </div>
     )
 
