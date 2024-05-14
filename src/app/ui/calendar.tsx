@@ -7,14 +7,8 @@ import { createCalendarEvent } from '../actions'
 import { useFormState } from 'react-dom'
 import { useState } from 'react'
 import { Alert } from './alert'
-const localizer = momentLocalizer(moment)
 
-const initialState = {
-    title: "",
-    start: new Date(),
-    end: new Date(),
-    allDay: false
-}
+const localizer = momentLocalizer(moment)
 
 export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEvents: typeof event.$inferSelect[], createCalendarEvent: (params: typeof event.$inferInsert) => Promise<void> }) {
     const [showAlert, setShowAlert] = useState(false)
@@ -23,12 +17,6 @@ export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEven
     const [title, setTitle] = useState("")
     const [allDayEvent, setAllDayEvent] = useState(false)
 
-    const myEventsList: {
-        title: string,
-        start: Date,
-        end: Date,
-        allDay: boolean
-    }[] = calendarEvents
     const getTimeDate = (date: Date) => {
         const split = date.toISOString().split(":")
         return `${split[0]}:${split[1]}`
@@ -54,7 +42,7 @@ export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEven
                 startAccessor="start"
                 endAccessor="end"
                 defaultView='week'
-                events={myEventsList}
+                events={calendarEvents}
                 style={{ height: "100vh" }}
                 onSelectSlot={createEvent}
                 selectable={true}
