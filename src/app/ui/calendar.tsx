@@ -36,7 +36,7 @@ export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEven
     }
 
     return (
-        <div>
+        <div className='w-full'>
             <ReactBigCalendar
                 localizer={localizer}
                 startAccessor="start"

@@ -3,6 +3,7 @@
 import { db } from '../../../lib/db'
 import { event } from '../../../lib/schemas'
 import { Calendar } from '../ui/calendar'
+import { SideMenu } from '../ui/side-menu'
 
 type CalendarEvent = typeof event.$inferInsert
 
@@ -21,6 +22,14 @@ export default async function calendar() {
     }
 
     return (
-        <Calendar calendarEvents={calendarEvents} createCalendarEvent={createCalendarEvent} />
+        <div className='flex flex-row'>
+            <SideMenu />
+            
+
+        <Calendar 
+      calendarEvents={calendarEvents}
+        createCalendarEvent={createCalendarEvent} 
+        />
+        </div>
     )
 }
