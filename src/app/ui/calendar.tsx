@@ -46,7 +46,6 @@ export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEven
         return `${split[0]}:${split[1]}`
     }
     const createEvent = async (slotInfo: SlotInfo) => {
-        console.log({ slotInfo })
         setStartDate(getTimeDate(slotInfo.start))
         setEndDate(getTimeDate(slotInfo.end))
         setShowAlert(true)

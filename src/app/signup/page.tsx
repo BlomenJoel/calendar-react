@@ -18,7 +18,7 @@ export default function SignUp() {
     const [pms, setPMS] = useState("")
     const [progress, setProgress] = useState<ProgressValues>("1/4")
     const [step, setStep] = useState(0)
-console.log({session})
+
     const router = useRouter()
 
     const handleSetGoalValues = (newVal: string, index: number) => {
@@ -58,7 +58,7 @@ console.log({session})
             {step === 0 &&
                 <div className="flex flex-col gap-4 text-center">
                     <h1>Varför finns den här kalendern?</h1>
-                    <p><i>"Genom att förlänga tiden mellan stimuli och respons får vi frihet"</i></p>
+                    <p><i>'Genom att förlänga tiden mellan stimuli och respons får vi frihet'</i></p>
                 </div>
             }
             {step === 1 &&

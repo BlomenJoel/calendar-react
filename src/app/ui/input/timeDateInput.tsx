@@ -5,7 +5,7 @@ type Props = {
 }
 
 export function TimeDateInput({ label, value, setValue }: Props) {
-    console.log({ value })
+
     return (
         <>
             <label className="text-black" htmlFor={label}>{label}: </label>
