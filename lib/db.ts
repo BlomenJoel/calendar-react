@@ -1,20 +1,8 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from './schemas';
+import { sql } from '@vercel/postgres';
+import { drizzle } from 'drizzle-orm/vercel-postgres';
+import './envConfig';
 
-const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
-
-if (!CONNECTION_STRING) {
-  throw new Error('No DB connection string provided');
-}
-
-const migrationClient = postgres(CONNECTION_STRING, { max: 1 });
-
-const client = postgres(CONNECTION_STRING);
-const db = drizzle(client, { schema });
-
+const db = drizzle(sql)
 export {
-  client as queryClient,
-  db,
-  migrationClient
+    db
 }

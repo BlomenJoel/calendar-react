@@ -15,7 +15,7 @@ const config: Config = {
       },
     },
   },
-  safelist:["w-1/4", "w-2/4", "w-3/4", "w-full"],
+  safelist:["w-1/4", "w-2/4", "w-3/4", "w-full", "border-red-500", "bg-red-500"],
   plugins: [],
 };
 export default config;

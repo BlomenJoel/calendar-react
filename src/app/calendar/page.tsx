@@ -21,13 +21,12 @@ export default async function calendar() {
         await db.insert(event).values(newEvent)
     }
 
-    return (
-        <div className='flex flex-row'>
+    return (<div className='flex flex-row p-4'>
             <SideMenu />
             
 
         <Calendar 
-      calendarEvents={calendarEvents}
+        calendarEvents={calendarEvents} 
         createCalendarEvent={createCalendarEvent} 
         />
         </div>

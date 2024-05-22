@@ -7,16 +7,18 @@ import { ProgressBar } from "../ui/progress-bar";
 import { createUserProfile } from "../actions/signup";
 import { useRouter } from "next/navigation";
 import { ProgressValues } from "../utils/types";
+import { useSession } from "next-auth/react"
 
 const LAST_STEP = 3
 
 export default function SignUp() {
+    const { data: session } = useSession()
     const [goals, setGoals] = useState([""])
     const [roles, setRoles] = useState([""])
     const [pms, setPMS] = useState("")
     const [progress, setProgress] = useState<ProgressValues>("1/4")
     const [step, setStep] = useState(0)
-
+console.log({session})
     const router = useRouter()
 
     const handleSetGoalValues = (newVal: string, index: number) => {
@@ -76,6 +78,7 @@ export default function SignUp() {
                      <p>Vad är dina övergripliga roller?</p>
                  </div>
                  <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
+                    {/* TODO: Add a color! */}
                      {roles.map((role, index) => <Input.Text key={index} label="" value={role} setValue={(newVal) => handleSetRoleValues(newVal, index)} />)}
                      <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
                          <Button.Primary onClick={() => setRoles([...roles, ""])} title="+" />

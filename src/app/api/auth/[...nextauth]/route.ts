@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { db } from "../../../../../lib/db";
+import "../../../../../lib/envConfig";
 
 if (!process.env.GOOGLE_CLIENT_ID) {
     throw new Error("Missing env GOOGLE_CLIENT_ID")
@@ -22,8 +23,8 @@ const authOptions = {
     ],
     session: {
         strategy: "database"
-    }
-    // callbacks: {
+    },
+        // callbacks: {
     // jwt({ token, account, user,  }) {
     //     if (account) {
     //         token.accessToken = account.access_token
