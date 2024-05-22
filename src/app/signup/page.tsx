@@ -58,7 +58,7 @@ export default function SignUp() {
             {step === 0 &&
                 <div className="flex flex-col gap-4 text-center">
                     <h1>Varför finns den här kalendern?</h1>
-                    <p><i>'Genom att förlänga tiden mellan stimuli och respons får vi frihet'</i></p>
+                    <p><i>&qout Genom att förlänga tiden mellan stimuli och respons får vi frihet &qout </i></p>
                 </div>
             }
             {step === 1 &&

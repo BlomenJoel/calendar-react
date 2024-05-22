@@ -69,7 +69,7 @@ export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEven
                 </div>
                 <div className='border border-black rounded-lg p-2 flex flex-row gap-4'>
                     <h2 className='font-bold text-sm'>GOALS</h2>
-                    {goals.map(goal => <GoalDiv  goal={goal}/>)}
+                    {goals.map((goal, index) => <GoalDiv key={index}  goal={goal}/>)}
                 </div>
             </div>
             <ReactBigCalendar
