@@ -2,7 +2,7 @@
 
 import { Calendar as ReactBigCalendar, SlotInfo, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import { event } from '../../../lib/schemas'
+import { event, goal, role } from '../../../lib/schemas'
 import { createCalendarEvent } from '../actions'
 import { useFormState } from 'react-dom'
 import { useState } from 'react'
@@ -10,29 +10,33 @@ import { Alert } from './alert'
 
 const localizer = momentLocalizer(moment)
 
-type Goal = {
-    title: string;
-    description:string;
-     roleId: string; 
-     roleColor:string;
-}
-function GoalDiv({goal}: {goal: Goal}) {
+type Goal = typeof goal.$inferSelect;
+
+function GoalDiv({goal}: {goal: Goal}){
     return (
-        <div className={`relative bg-white border-${goal.roleColor} border-b-2 p-1`}>
-            <div className={`z-0 h-[20px] absolute -right-12 top-8 overflow-hidden text-xs p-1 bg-${goal.roleColor}`}>
+        // <div className={`relative bg-white border-${goal.roleColor} border-b-2 p-1`}>
+        <div className={`relative bg-white border-b-2 p-1`}>
+            {/* <div className={`z-0 h-[20px] absolute -right-12 top-8 overflow-hidden text-xs p-1 bg-${goal.roleColor}`}> */}
+            <div className={`z-0 h-[20px] absolute -right-12 top-8 overflow-hidden text-xs p-1`}>
                 <div className='rotate-90'>
-                {goal.roleId}
+                {/* {goal.roleId} */}
+                {goal.id}
                 </div>
             </div>
             <div>
                 <h3>{goal.title}</h3>
-                <p>{goal.description}</p>
+                {/* <p>{goal.description}</p> */}
             </div>
         </div>
     )
 }
-
-export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEvents: typeof event.$inferSelect[], createCalendarEvent: (params: typeof event.$inferInsert) => Promise<void> }) {
+type Props  = {  
+    calendarEvents: typeof event.$inferSelect[], 
+    createCalendarEvent: (params: typeof event.$inferInsert) => Promise<void>
+    roles: typeof role.$inferSelect[],
+    goals: typeof goal.$inferSelect[],
+}
+export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: Props) {
     const [showAlert, setShowAlert] = useState(false)
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
@@ -40,7 +44,6 @@ export function Calendar({ calendarEvents, createCalendarEvent }: { calendarEven
     const [allDayEvent, setAllDayEvent] = useState(false)
 
     //TODO: Replave with real data.
-    const goals = [{ title: "Run Maratgon", description:"something nice that motivates me", roleId: "some-role-id", roleColor:"red-500"}]
     const getTimeDate = (date: Date) => {
         const split = date.toISOString().split(":")
         return `${split[0]}:${split[1]}`

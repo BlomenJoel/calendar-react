@@ -1,13 +1,21 @@
 'use server'
 
+import { eq } from 'drizzle-orm'
 import { db } from '../../../lib/db'
-import { event } from '../../../lib/schemas'
+import { event, goal, role } from '../../../lib/schemas'
 import { Calendar } from '../ui/calendar'
 import { SideMenu } from '../ui/side-menu'
+import { getServerSession } from "next-auth"
+import { authOptions } from "../api/auth/[...nextauth]/route"
+import { redirect } from 'next/navigation'
 
 type CalendarEvent = typeof event.$inferInsert
 
 export default async function calendar() {
+    const session = await getServerSession(authOptions)
+    if(!session) {
+        redirect("/test")
+    }
     const calendarEvents = await db.select({
         id: event.id,
         start: event.start,
@@ -16,6 +24,8 @@ export default async function calendar() {
         allDay: event.allDay
     }).from(event).orderBy(event.start)
 
+    const roles = await db.select().from(role).where(eq(role.userId, session.user.id))
+    const goals = await db.select().from(goal).where(eq(goal.userId, session.user.id))
     const createCalendarEvent = async (newEvent: CalendarEvent) => {
         "use server";
         await db.insert(event).values(newEvent)
@@ -27,6 +37,8 @@ export default async function calendar() {
 
         <Calendar 
         calendarEvents={calendarEvents} 
+        roles={roles}
+        goals={goals}
         createCalendarEvent={createCalendarEvent} 
         />
         </div>
