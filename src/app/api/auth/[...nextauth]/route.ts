@@ -24,29 +24,17 @@ const authOptions = {
     session: {
         strategy: "database"
     },
-        // callbacks: {
-    // jwt({ token, account, user,  }) {
-    //     if (account) {
-    //         token.accessToken = account.access_token
-    //         token.id = user?.id
-    //     }
-    //     return token
-    // },
-    // session({ session, token }) {
-    //     // I skipped the line below coz it gave me a TypeError
-    //     // session.accessToken = token.accessToken;
-    //     session.user.id = token.id as string;
-
-    //     return session;
-    // },
-    // }
+    callbacks: {
+        session: async ({ session, user }) => {
+            
+          if (session?.user && user.id) {
+            session.user.id = user.id;
+          }
+          return session;
+        },
+      },
 } satisfies NextAuthOptions
 
-
-// export const { handlers, auth, signIn, signOut } = NextAuth({
-//     adapter: DrizzleAdapter(db),
-//     providers: [],
-//   })
 const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
