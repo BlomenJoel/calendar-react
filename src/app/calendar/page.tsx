@@ -14,7 +14,7 @@ type CalendarEvent = typeof event.$inferInsert
 export default async function calendar() {
     const session = await getServerSession(authOptions)
     if(!session) {
-        redirect("/test") // TODO: Change this
+        redirect("/")
     }
     const calendarEvents = await db.select({
         id: event.id,
