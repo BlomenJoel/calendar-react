@@ -12,15 +12,15 @@ const localizer = momentLocalizer(moment)
 
 type Goal = typeof goal.$inferSelect;
 
-function GoalDiv({goal}: {goal: Goal}){
+function GoalDiv({ goal }: { goal: Goal }) {
     return (
         // <div className={`relative bg-white border-${goal.roleColor} border-b-2 p-1`}>
         <div className={`relative bg-white border-b-2 p-1`}>
             {/* <div className={`z-0 h-[20px] absolute -right-12 top-8 overflow-hidden text-xs p-1 bg-${goal.roleColor}`}> */}
             <div className={`z-0 h-[20px] absolute -right-12 top-8 overflow-hidden text-xs p-1`}>
                 <div className='rotate-90'>
-                {/* {goal.roleId} */}
-                {goal.id}
+                    {/* {goal.roleId} */}
+                    {goal.id}
                 </div>
             </div>
             <div>
@@ -30,8 +30,8 @@ function GoalDiv({goal}: {goal: Goal}){
         </div>
     )
 }
-type Props  = {  
-    calendarEvents: typeof event.$inferSelect[], 
+type Props = {
+    calendarEvents: typeof event.$inferSelect[],
     createCalendarEvent: (params: typeof event.$inferInsert) => Promise<void>
     roles: typeof role.$inferSelect[],
     goals: typeof goal.$inferSelect[],
@@ -65,14 +65,14 @@ export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: 
         <div className='w-full pl-4'>
             <div className='flex flex-row justify-between pb-4'>
                 <div className='border border-black rounded-lg p-2 flex flex-row gap-4'>
-                    <h2 className='font-bold text-sm'>PERSONAL <br/> MISSION <br /> STATEMENT</h2>
+                    <h2 className='font-bold text-sm'>PERSONAL <br /> MISSION <br /> STATEMENT</h2>
                     <p>
                         This is my statement!
                     </p>
                 </div>
                 <div className='border border-black rounded-lg p-2 flex flex-row gap-4'>
                     <h2 className='font-bold text-sm'>GOALS</h2>
-                    {goals.map((goal, index) => <GoalDiv key={index}  goal={goal}/>)}
+                    {goals.map((goal, index) => <GoalDiv key={index} goal={goal} />)}
                 </div>
             </div>
             <ReactBigCalendar
@@ -85,7 +85,7 @@ export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: 
                 onSelectSlot={createEvent}
                 selectable={true}
             />
-            {showAlert && <Alert title={title} setTitle={setTitle} endDate={endDate} startDate={startDate} setEndDate={setEndDate} setStartDate={setStartDate} handleCreateEvent={handleCreateEvent} allDayEvent={allDayEvent} setAllDayEvent={setAllDayEvent} />}
+            {showAlert && <Alert handelOutsideClick={() => setShowAlert(false)} title={title} setTitle={setTitle} endDate={endDate} startDate={startDate} setEndDate={setEndDate} setStartDate={setStartDate} handleCreateEvent={handleCreateEvent} allDayEvent={allDayEvent} setAllDayEvent={setAllDayEvent} />}
         </div>
     )
 }
