@@ -5,10 +5,9 @@ import moment from 'moment'
 import { event, goal, role } from '../../../lib/schemas'
 import { useState } from 'react'
 import { Alert } from './alert'
+import { Goal } from '../utils/types'
 
 const localizer = momentLocalizer(moment)
-
-type Goal = typeof goal.$inferSelect;
 
 function GoalDiv({ goal }: { goal: Goal }) {
     return (
