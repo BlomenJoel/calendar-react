@@ -1,4 +1,6 @@
 {
+  "id": "25ddfa16-4cdd-4074-925c-1fd6cbf9e379",
+  "prevId": "a962f463-6313-46e4-ad21-d47feb89a382",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -86,15 +88,15 @@
         "account_userId_user_id_fk": {
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
-          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -171,6 +173,12 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -178,15 +186,15 @@
         "goal_userId_user_id_fk": {
           "name": "goal_userId_user_id_fk",
           "tableFrom": "goal",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
-          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -221,15 +229,15 @@
         "role_userId_user_id_fk": {
           "name": "role_userId_user_id_fk",
           "tableFrom": "role",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
-          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -278,25 +286,25 @@
         "session_userId_user_id_fk": {
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
+          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
-          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "session_sessionToken_unique": {
           "name": "session_sessionToken_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "sessionToken"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -341,10 +349,10 @@
       "uniqueConstraints": {
         "user_email_unique": {
           "name": "user_email_unique",
+          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ],
-          "nullsNotDistinct": false
+          ]
         }
       }
     },
@@ -388,10 +396,8 @@
   "enums": {},
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "a962f463-6313-46e4-ad21-d47feb89a382",
-  "prevId": "51b08e38-75a6-402d-8fe3-2c3b7b8b6005"
+    "tables": {}
+  }
 }

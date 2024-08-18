@@ -1,0 +1,1 @@
+ALTER TABLE "goal" ADD COLUMN "description" varchar NOT NULL;
