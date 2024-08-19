@@ -13,7 +13,7 @@ type CalendarEvent = typeof event.$inferInsert
 
 export default async function calendar() {
     const session = await getServerSession(authOptions)
-    if(!session) {
+    if (!session) {
         redirect("/")
     }
     const calendarEvents = await db.select({
@@ -21,7 +21,8 @@ export default async function calendar() {
         start: event.start,
         end: event.end,
         title: event.title,
-        allDay: event.allDay
+        allDay: event.allDay,
+        goalId: event.goalId
     }).from(event).orderBy(event.start)
 
     const roles = await db.select().from(role).where(eq(role.userId, session.user.id))
@@ -32,15 +33,15 @@ export default async function calendar() {
     }
 
     return (<div className='flex flex-row p-4'>
-            <SideMenu />
-            
+        <SideMenu />
 
-        <Calendar 
-        calendarEvents={calendarEvents} 
-        roles={roles}
-        goals={goals}
-        createCalendarEvent={createCalendarEvent} 
+
+        <Calendar
+            calendarEvents={calendarEvents}
+            roles={roles}
+            goals={goals}
+            createCalendarEvent={createCalendarEvent}
         />
-        </div>
+    </div>
     )
 }

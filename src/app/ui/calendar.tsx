@@ -33,6 +33,7 @@ export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: 
     const [showAlert, setShowAlert] = useState(false)
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
+    const [assosciatedGoal, setAssosciatedGoal] = useState<null | string>(null)
     const [title, setTitle] = useState("")
     const [allDayEvent, setAllDayEvent] = useState(false)
 
@@ -45,11 +46,16 @@ export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: 
         setStartDate(getTimeDate(slotInfo.start))
         setEndDate(getTimeDate(slotInfo.end))
         setShowAlert(true)
+        setAssosciatedGoal(null)
     }
 
     const handleCreateEvent = async () => {
         await createCalendarEvent({
-            title, start: new Date(startDate), end: new Date(endDate), allDay: allDayEvent
+            title,
+            start: new Date(startDate),
+            end: new Date(endDate),
+            allDay: allDayEvent,
+            goalId: assosciatedGoal
         })
         setShowAlert(false)
     }
@@ -84,7 +90,22 @@ export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: 
                 onSelectSlot={createEvent}
                 selectable={true}
             />
-            {showAlert && <Alert handelOutsideClick={() => setShowAlert(false)} title={title} setTitle={setTitle} endDate={endDate} startDate={startDate} setEndDate={setEndDate} setStartDate={setStartDate} handleCreateEvent={handleCreateEvent} allDayEvent={allDayEvent} setAllDayEvent={setAllDayEvent} />}
+            {showAlert &&
+                <Alert
+                    handelOutsideClick={() => setShowAlert(false)}
+                    title={title}
+                    setTitle={setTitle}
+                    endDate={endDate}
+                    startDate={startDate}
+                    setEndDate={setEndDate}
+                    setStartDate={setStartDate}
+                    setAssociatedGoal={setAssosciatedGoal}
+                    handleCreateEvent={handleCreateEvent}
+                    allDayEvent={allDayEvent}
+                    setAllDayEvent={setAllDayEvent}
+                    goals={goals}
+                />
+            }
         </div>
     )
 }
