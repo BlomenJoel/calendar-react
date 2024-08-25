@@ -2,7 +2,7 @@
 
 import { Calendar as ReactBigCalendar, SlotInfo, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
-import { event, goal, role } from '../../../lib/schemas'
+import { event, goal } from '../../../lib/schemas'
 import { useState } from 'react'
 import { Alert } from './alert'
 import { Goal } from '../utils/types'
@@ -26,10 +26,10 @@ function GoalDiv({ goal }: { goal: Goal }) {
 type Props = {
     calendarEvents: typeof event.$inferSelect[],
     createCalendarEvent: (params: typeof event.$inferInsert) => Promise<void>
-    roles: typeof role.$inferSelect[],
     goals: typeof goal.$inferSelect[],
 }
-export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: Props) {
+
+export function Calendar({ calendarEvents, createCalendarEvent, goals }: Props) {
     const [showAlert, setShowAlert] = useState(false)
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
@@ -37,10 +37,15 @@ export function Calendar({ calendarEvents, createCalendarEvent, roles, goals }: 
     const [title, setTitle] = useState("")
     const [allDayEvent, setAllDayEvent] = useState(false)
 
-    //TODO: Replave with real data.
     const getTimeDate = (date: Date) => {
-        const split = date.toISOString().split(":")
-        return `${split[0]}:${split[1]}`
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`
+
+        return formattedDate
     }
     const createEvent = async (slotInfo: SlotInfo) => {
         setStartDate(getTimeDate(slotInfo.start))
