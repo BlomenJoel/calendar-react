@@ -8,10 +8,22 @@
 
 &#x2611; Associate events with goals
 
-&#x2610; Visualize goals better
-
-&#x2610; Add roles to profile page
+&#x2611; Add roles to profile page 
 
 &#x2610; Fix next auth initialization to fix deploy
 
+
+## Soon
+
+&#x2610; Visualize events better (complicated...)
+
+## Later
+
+&#x2610; AI assistance
+
+&#x2610; Own table
+
+## Even later
+
+## Pipe dreams
 

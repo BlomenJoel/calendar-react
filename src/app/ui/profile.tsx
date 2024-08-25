@@ -1,16 +1,17 @@
 "use client"
 import { useState } from "react"
-import { Goal } from "../utils/types"
+import { Goal, Role } from "../utils/types"
 import { Button } from "./button"
 import { Input } from "./input"
-import { goal } from "../../../lib/schemas"
-type GoalEvent = typeof goal.$inferInsert
+import { goal, role } from "../../../lib/schemas"
 
-export const GoalDiv = ({ goal, updateGoal }: { goal: Goal, updateGoal: (updatedGoal: GoalEvent) => Promise<void> }) => {
+type InsertGoal = typeof goal.$inferInsert
+
+export const GoalDiv = ({ goal, updateGoal }: { goal: Goal, updateGoal: (updatedGoal: InsertGoal) => Promise<void> }) => {
     const [localGoal, setLocalGoal] = useState(goal)
     const [edit, setEdit] = useState(false)
 
-    const setValue = (newVal: string, key: keyof GoalEvent) => {
+    const setValue = (newVal: string, key: keyof InsertGoal) => {
         setLocalGoal({ ...localGoal, [key]: newVal })
     }
 
@@ -19,8 +20,8 @@ export const GoalDiv = ({ goal, updateGoal }: { goal: Goal, updateGoal: (updated
     }
     return (
         <div>
-            <Button.Primary onClick={() => setEdit(true)} title="Edit" />
-            <Button.Primary onClick={save} title="Save" />
+            <Button.Primary onClick={() => setEdit(true)} title="Edit" disabled={edit} />
+            <Button.Primary onClick={save} title="Save" disabled={!edit} />
             {edit ?
                 <div className="bg-white flex flex-col gap-2">
                     <Input.Text label="Title" setValue={(newVal) => setValue(newVal, "title")} value={localGoal.title} />
@@ -36,6 +37,37 @@ export const GoalDiv = ({ goal, updateGoal }: { goal: Goal, updateGoal: (updated
                     <div className={`relative bg-green-400 rounded-lg p-1`}>
                         <h3 className='h-16'> {localGoal.description}</h3>
                     </div>
+                </div>
+            }
+        </div>
+    )
+}
+
+type RoleInsert = typeof role.$inferInsert
+
+export const RoleDiv = ({ role, updateRole }: { role: Role, updateRole: (updatedGoal: RoleInsert) => Promise<void> }) => {
+    const [localRole, setLocalRole] = useState(role)
+    const [edit, setEdit] = useState(false)
+
+    const setValue = (newVal: string, key: keyof RoleInsert) => {
+        setLocalRole({ ...localRole, [key]: newVal })
+    }
+
+    const save = () => {
+        updateRole(localRole)
+        setEdit(false)
+    }
+    return (
+        <div>
+            <Button.Primary onClick={() => setEdit(true)} title="Edit" disabled={edit} />
+            <Button.Primary onClick={save} title="Save" disabled={!edit} />
+            {edit ?
+                <div className="bg-white flex flex-col gap-2">
+                    <Input.Text label="Title" setValue={(newVal) => setValue(newVal, "title")} value={localRole.title} />
+                </div>
+                :
+                <div className={`relative rounded-lg w-80 bg-green-400`}>
+                    {localRole.title}
                 </div>
             }
         </div>
