@@ -10,8 +10,7 @@
 
 &#x2611; Add roles to profile page 
 
-&#x2610; Fix next auth initialization to fix deploy
-
+&#x2611; Fix next auth initialization to fix deploy
 
 ## Soon
 
