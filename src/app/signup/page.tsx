@@ -79,6 +79,7 @@ export default function SignUp() {
                  </div>
                  <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
                     {/* TODO: Add a color! */}
+                    {/* TODO: Add description! */}
                      {roles.map((role, index) => <Input.Text key={index} label="" value={role} setValue={(newVal) => handleSetRoleValues(newVal, index)} />)}
                      <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
                          <Button.Primary onClick={() => setRoles([...roles, ""])} title="+" />

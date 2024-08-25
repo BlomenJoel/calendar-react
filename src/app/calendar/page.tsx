@@ -6,8 +6,8 @@ import { event, goal, role } from '../../../lib/schemas'
 import { Calendar } from '../ui/calendar'
 import { SideMenu } from '../ui/side-menu'
 import { getServerSession } from "next-auth"
-import { authOptions } from "../api/auth/[...nextauth]/route"
 import { redirect } from 'next/navigation'
+import { authOptions } from '../utils/authOptions'
 
 type CalendarEvent = typeof event.$inferInsert
 

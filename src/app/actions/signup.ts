@@ -8,7 +8,7 @@ const createUserProfile = async (data: { roles: string[], goals: string[], user:
         const rolesToInsert = data.roles.map(role => ({ title: role, userId: data.user.id }))
         await tx.insert(role).values(rolesToInsert)
 
-        const goalsToInsert = data.goals.map(goal => ({ title: goal, userId: data.user.id }))
+        const goalsToInsert = data.goals.map(goal => ({ title: goal, userId: data.user.id, description: "something" }))
         await tx.insert(goal).values(goalsToInsert)
     })
 }

@@ -11,9 +11,9 @@ export function SelectInput({ label, options, onChange }: Props) {
         onChange={(e) => {
           onChange(e.currentTarget.value);
         }}>
-        <option>{label}</option>
+        <option key={label}>{label}</option>
         {options.map(option =>
-          <option value={option.val}>{option.label}</option>
+          <option value={option.val} key={option.val}>{option.label}</option>
         )}
       </select>
     </div>
