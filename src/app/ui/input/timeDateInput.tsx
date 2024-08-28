@@ -1,6 +1,6 @@
 type Props = {
   label: string | undefined;
-  value: string;
+  value: string | undefined;
   setValue: (event: string) => void;
 };
 

@@ -29,7 +29,7 @@ type Props = {
     goals: typeof goal.$inferSelect[],
 }
 
-export function Calendar({ calendarEvents, createCalendarEvent, goals }: Props) {
+export function SCalendar({ calendarEvents, createCalendarEvent, goals }: Props) {
     const [showAlert, setShowAlert] = useState(false)
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
