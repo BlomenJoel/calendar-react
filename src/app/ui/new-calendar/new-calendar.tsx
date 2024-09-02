@@ -97,6 +97,7 @@ export default function NewCalendarTable({ calendarEvents, goals, createCalendar
             })}
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {hours.map((hour) => (
             <TableHour

@@ -5,19 +5,53 @@ import { cn } from "@/lib/utils"
 import { Dispatch, MutableRefObject, SetStateAction, useCallback } from "react"
 import { CalendarEvent } from "@/app/utils/types"
 
-type Props = {
-    hour: number, 
-    days: string[], 
-    currentWeekStart: Date, 
-    selectedSlots: SelectedSlot[], 
-    events: CalendarEvent[], 
-    setSelectedSlots: Dispatch<SetStateAction<SelectedSlot[]>>, 
+type ChildProps = {
+    hour: number,
+    minute: number,
+    day: string,
+    date: Date,
+    selectedSlots: SelectedSlot[],
+    isEventInSlot: boolean;
+    eventLabel?: string | null;
+    eventGoal?: string | null;
+    handleMouseDown: (date: Date, hour: number, minute: number) => void;
+    handleMouseEnter: (date: Date, hour: number, minute: number) => void;
+}
+
+type ParentProps = {
+    hour: number,
+    days: string[],
+    currentWeekStart: Date,
+    selectedSlots: SelectedSlot[],
+    events: CalendarEvent[],
+    setSelectedSlots: Dispatch<SetStateAction<SelectedSlot[]>>,
     setIsDragging: (isDragging: boolean) => void,
     startSlotRef: MutableRefObject<SelectedSlot | null>
     isDragging: boolean
 }
 
-export function TableHour({ hour, days, currentWeekStart, selectedSlots, events, setSelectedSlots, setIsDragging, startSlotRef, isDragging }: Props) {
+export function TableHour({ hour, days, currentWeekStart, selectedSlots, events, setSelectedSlots, setIsDragging, startSlotRef, isDragging }: ParentProps) {
+
+
+
+    const getEventInSlot = (slotStart: Date, slotEnd: Date) => {
+        return events.find(event => {
+            return slotStart < event.end && slotEnd > event.start
+        })
+    }
+
+    const getEventsGoal = (foundEvent: CalendarEvent | undefined, slotEnd: Date) => {
+        if (foundEvent) console.log({ slotEnd, foundEvent })
+        if (foundEvent?.start.getTime() === slotEnd.getTime()) {
+            return foundEvent.goalTitle
+        }
+    }
+
+    const getEventLabel = (foundEvent: CalendarEvent | undefined, slotStart: Date) => {
+        if (foundEvent?.start.getTime() === slotStart.getTime()) {
+            return foundEvent.title
+        }
+    }
 
     const handleSlotSelection = useCallback((date: Date, hour: number, minute: number) => {
         setSelectedSlots(prev => {
@@ -64,15 +98,6 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
         }
     }
 
-
-    const isEventInSlot = (date: Date, hour: number, minute: number) => {
-        return events.some(event => {
-            const slotStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute)
-            const slotEnd = new Date(slotStart.getTime() + 30 * 60000)
-            return slotStart < event.end && slotEnd > event.start
-        })
-    }
-
     return (
         <TableRow key={hour}>
             <TableCell className="font-medium">
@@ -90,30 +115,58 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
                         )}
                         role="gridcell"
                     >
-                        {[0, 30].map(minute => (
-                            <div
-                                key={`${day}-${hour}-${minute}`}
-                                className={cn(
-                                    "w-full h-1/2",
-                                    selectedSlots.some(slot =>
-                                        slot.date.getTime() === date.getTime() &&
-                                        slot.hour === hour &&
-                                        slot.minute === minute
-                                    ) && "bg-primary/20",
-                                    isEventInSlot(date, hour, minute) && "bg-blue-500/50"
-                                )}
-                                onMouseDown={() => handleMouseDown(date, hour, minute)}
-                                onMouseEnter={() => handleMouseEnter(date, hour, minute)}
-                                aria-selected={selectedSlots.some(slot =>
-                                    slot.date.getTime() === date.getTime() &&
-                                    slot.hour === hour &&
-                                    slot.minute === minute
-                                )}
-                            />
-                        ))}
+
+                        {[0, 30].map(minute => {
+                            const slotStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute)
+                            const slotEnd = new Date(slotStart.getTime() + 30 * 60000)
+                            const eventInSlot = getEventInSlot(slotStart, slotEnd)
+                            const eventLabel = getEventLabel(eventInSlot, slotStart)
+                            const eventGoal = getEventsGoal(eventInSlot, slotStart)
+                            return (
+                                <HourTableCell
+                                    isEventInSlot={!!eventInSlot}
+                                    eventGoal={eventGoal}
+                                    eventLabel={eventLabel}
+                                    hour={hour}
+                                    minute={minute}
+                                    date={date}
+                                    day={day}
+                                    selectedSlots={selectedSlots}
+                                    handleMouseDown={handleMouseDown}
+                                    handleMouseEnter={handleMouseEnter}
+                                />
+                            )
+                        })}
                     </TableCell>
                 )
             })}
         </TableRow>
+    )
+}
+
+const HourTableCell = (props: ChildProps) => {
+    return (
+        <div
+            key={`${props.day}-${props.hour}-${props.minute}`}
+            className={cn(
+                "w-full h-1/2",
+                props.selectedSlots.some(slot =>
+                    slot.date.getTime() === props.date.getTime() &&
+                    slot.hour === props.hour &&
+                    slot.minute === props.minute
+                ) && "bg-primary/20",
+                props.isEventInSlot && "bg-blue-500/50"
+            )}
+            onMouseDown={() => props.handleMouseDown(props.date, props.hour, props.minute)}
+            onMouseEnter={() => props.handleMouseEnter(props.date, props.hour, props.minute)}
+            aria-selected={props.selectedSlots.some(slot =>
+                slot.date.getTime() === props.date.getTime() &&
+                slot.hour === props.hour &&
+                slot.minute === props.minute
+            )}
+        >
+            {props.eventLabel && <h2>{props.eventLabel}</h2>}
+            {props.eventGoal && <h2>{props.eventGoal}</h2>}
+        </div>
     )
 }
