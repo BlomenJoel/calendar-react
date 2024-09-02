@@ -14,15 +14,17 @@
 
 &#x2611; Own table
 
+&#x2611; Fetch calendar events more efficent, don't get them all (POKEMON)
+
+&#x2611; Add goals and mission statement to calendar again.
+
 &#x2610; Visualize events better
 
 &#x2610; Refetch events when one is created (reactQuery?)
 
-&#x2610; Add goals and mission statement to calendar again.
 
 &#x2610; Reconsider data fetching, add a loading state client side. So slow now.
 
-&#x2610; Fetch calendar events more efficent, don't get them all (POKEMON)
 
 ## Soon
 

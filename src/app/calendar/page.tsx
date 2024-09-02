@@ -63,11 +63,14 @@ export default async function calendar() {
 
     return (<div className='flex flex-row p-4'>
         <SideMenu />
-        <NewCalendar.Table
-            calendarEvents={calendarEvents}
-            goals={goals}
-            createCalendarEvent={createCalendarEvent}
-        />
+        <div>
+            <NewCalendar.TopBar goals={goals} />
+            <NewCalendar.Table
+                calendarEvents={calendarEvents}
+                goals={goals}
+                createCalendarEvent={createCalendarEvent}
+            />
+        </div>
     </div>
     )
 }
