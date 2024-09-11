@@ -24,7 +24,9 @@
 
 &#x2611; Refetch events when one is created
 
-&#x2610; Add view of event
+&#x2611; Add view of event
+
+&#x2610; Mobil anpassa
 
 &#x2610; Reconsider data fetching, add a loading state client side. So slow now.
 
