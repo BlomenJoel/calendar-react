@@ -13,6 +13,7 @@ type ChildProps = {
     selectedSlots: SelectedSlot[],
     isEventInSlot: boolean;
     eventLabel?: string | null;
+    eventColor?: string | null;
     eventGoal?: string | null;
     handleMouseDown: (date: Date, hour: number, minute: number) => void;
     handleMouseEnter: (date: Date, hour: number, minute: number) => void;
@@ -23,7 +24,7 @@ type ParentProps = {
     days: string[],
     currentWeekStart: Date,
     selectedSlots: SelectedSlot[],
-    events: CalendarEvent[],
+    events: CalendarEvent[] | undefined,
     setSelectedSlots: Dispatch<SetStateAction<SelectedSlot[]>>,
     setIsDragging: (isDragging: boolean) => void,
     startSlotRef: MutableRefObject<SelectedSlot | null>
@@ -35,13 +36,12 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
 
 
     const getEventInSlot = (slotStart: Date, slotEnd: Date) => {
-        return events.find(event => {
+        return events?.find(event => {
             return slotStart < event.end && slotEnd > event.start
         })
     }
 
     const getEventsGoal = (foundEvent: CalendarEvent | undefined, slotEnd: Date) => {
-        if (foundEvent) console.log({ slotEnd, foundEvent })
         if (foundEvent?.start.getTime() === slotEnd.getTime()) {
             return foundEvent.goalTitle
         }
@@ -66,7 +66,7 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
                 return [...prev, newSlot]
             }
         })
-    }, [])
+    }, [setSelectedSlots])
 
     const handleMouseDown = (date: Date, hour: number, minute: number) => {
         setIsDragging(true)
@@ -110,7 +110,7 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
                     <TableCell
                         key={`${day}-${hour}`}
                         className={cn(
-                            "border-t border-gray-200 p-0 h-12 cursor-pointer select-none",
+                            "p-0 h-12 cursor-pointer select-none",
                             index < days.length - 1 && "border-r border-gray-200"
                         )}
                         role="gridcell"
@@ -124,11 +124,13 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
                             const eventGoal = getEventsGoal(eventInSlot, slotStart)
                             return (
                                 <HourTableCell
+                                    eventColor={eventInSlot?.goalColor}
                                     isEventInSlot={!!eventInSlot}
                                     eventGoal={eventGoal}
                                     eventLabel={eventLabel}
                                     hour={hour}
                                     minute={minute}
+                                    key={`${day}-${hour}-${minute}`}
                                     date={date}
                                     day={day}
                                     selectedSlots={selectedSlots}
@@ -149,14 +151,15 @@ const HourTableCell = (props: ChildProps) => {
         <div
             key={`${props.day}-${props.hour}-${props.minute}`}
             className={cn(
-                "w-full h-1/2",
+                "w-full h-1/2 relative z-10",
                 props.selectedSlots.some(slot =>
                     slot.date.getTime() === props.date.getTime() &&
                     slot.hour === props.hour &&
                     slot.minute === props.minute
                 ) && "bg-primary/20",
-                props.isEventInSlot && "bg-blue-500/50"
+                props.isEventInSlot && "bg-blue-500"
             )}
+            style={props.eventColor ? { backgroundColor: props.eventColor } : undefined}
             onMouseDown={() => props.handleMouseDown(props.date, props.hour, props.minute)}
             onMouseEnter={() => props.handleMouseEnter(props.date, props.hour, props.minute)}
             aria-selected={props.selectedSlots.some(slot =>
@@ -166,7 +169,16 @@ const HourTableCell = (props: ChildProps) => {
             )}
         >
             {props.eventLabel && <h2>{props.eventLabel}</h2>}
-            {props.eventGoal && <h2>{props.eventGoal}</h2>}
+            {props.eventGoal && props.eventColor &&
+                <div className={`-z-10 absolute -top-7 -right-28`}>
+                    <div
+                        style={{ backgroundColor: props.eventColor }}
+                        className={`rotate-90 origin-left text-xs pb-6 p-1 h-14 w-24 rounded-lg`}
+                    >
+                        {props.eventGoal}
+                    </div>
+                </div>
+            }
         </div>
     )
 }

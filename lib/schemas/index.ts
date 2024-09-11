@@ -31,7 +31,8 @@ export const goal = pgTable("goal", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   title: varchar("title").notNull(),
-  description: varchar("description").notNull()
+  description: varchar("description").notNull(),
+  color: varchar("color").notNull(),
 })
 
 

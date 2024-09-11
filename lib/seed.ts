@@ -59,5 +59,5 @@ await db.insert(users).values(newUser)
 const roles: Role[] = [{ title: "friend", userId: newUser.id! }, { title: "co-worker", userId: newUser.id! }]
 await db.insert(role).values(roles)
 // ROLES
-const goals: Goal[] = [{ title: "be a friend", userId: newUser.id!, description: "some-desc" }, { title: "cooking a meal", userId: newUser.id!, description: "some-desc" }]
+const goals: Goal[] = [{ title: "be a friend", userId: newUser.id!, description: "some-desc", color: "#000000" }, { title: "cooking a meal", userId: newUser.id!, description: "some-desc", color: "#000000" }]
 await db.insert(goal).values(goals)

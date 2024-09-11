@@ -18,10 +18,11 @@
 
 &#x2611; Add goals and mission statement to calendar again.
 
-&#x2610; Visualize events better
+&#x2611; Visualize events better
 
-&#x2610; Refetch events when one is created (reactQuery?)
+&#x2611; Add whole day events
 
+&#x2611; Refetch events when one is created
 
 &#x2610; Reconsider data fetching, add a loading state client side. So slow now.
 

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import NextAuthProvider from './context/next-auth-provider';
 import "./globals.css";
 import "./test.scss";
+import Providers from "./providers";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,6 +13,7 @@ export const metadata: Metadata = {
   description: "Created by yours truly",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,11 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <body className={inter.className}>
+      <body className={inter.className}>
         <NextAuthProvider>
-          {children}
-          </NextAuthProvider>
-        </body>
+          <Providers>{children}</Providers>
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "goal" ADD COLUMN "color" varchar DEFAULT '#000000' NOT NULL;

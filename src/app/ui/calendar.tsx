@@ -6,23 +6,10 @@ import { event, goal } from '../../../lib/schemas'
 import { useState } from 'react'
 import { Alert } from './alert'
 import { Goal } from '../utils/types'
+import { VisualizeGoal } from './visualizeGoal'
 
 const localizer = momentLocalizer(moment)
 
-function GoalDiv({ goal }: { goal: Goal }) {
-    return (
-        <div className={`relative border-b-4 border-r-4 border-blue-200 rounded-lg w-80 bg-green-400`}>
-            <div className={`z-0 absolute -top-7 -right-14`}>
-                <div className='rotate-90 origin-left text-xs pb-6 p-1 bg-blue-200 h-14 w-12 rounded-lg'>
-                    {goal.title}
-                </div>
-            </div>
-            <div className={`relative bg-green-400 rounded-lg p-1`}>
-                <h3 className='h-16'> {goal.description}</h3>
-            </div>
-        </div>
-    )
-}
 type Props = {
     calendarEvents: typeof event.$inferSelect[],
     createCalendarEvent: (params: typeof event.$inferInsert) => Promise<void>
@@ -79,7 +66,7 @@ export function SCalendar({ calendarEvents, createCalendarEvent, goals }: Props)
                         <h2 className='font-bold text-sm'>GOALS</h2>
                         <div className='flex flex-col gap-1'>
                             {goals.map((goal, index) =>
-                                <GoalDiv key={index} goal={goal} />
+                                <VisualizeGoal key={index} description={goal.description} title={goal.title} color={goal.color} />
                             )}
                         </div>
                     </div>
