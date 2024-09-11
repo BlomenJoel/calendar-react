@@ -1,4 +1,4 @@
-import { formatDate } from "@/app/utils/dateFormat"
+import { formatDate, getTimeDate } from "@/app/utils/dateFormat"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Input } from "../input";
 import { Goal } from "@/app/utils/types";
@@ -15,16 +15,6 @@ type Props = {
     handleCreateEvent: (data: typeof event.$inferInsert) => void;
 }
 
-const getTimeDate = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`
-
-    return formattedDate
-}
 
 export function CalendarDialog(props: Props) {
     const [startDate, setStartDate] = useState<string>()
@@ -35,16 +25,15 @@ export function CalendarDialog(props: Props) {
 
     useEffect(() => {
         const dates = props.selectedSlots.sort((a, b) => a.date.getTime() - b.date.getTime() || a.hour - b.hour || a.minute - b.minute)
-        console.log({ dates, selectedSlots: props.selectedSlots })
         if (dates.length > 0) {
             const start = new Date(dates[0].date)
             start.setHours(dates[0].hour)
             start.setMinutes(dates[0].minute)
-            
+
             const end = new Date(dates[dates.length - 1].date)
             end.setHours(dates[dates.length - 1].hour)
             end.setMinutes(dates[dates.length - 1].minute);
-        
+
             // Add 30 minutes
             end.setMinutes(end.getMinutes() + 30);
 
@@ -83,7 +72,7 @@ export function CalendarDialog(props: Props) {
                     )}
                     <Input.Select options={props.goals.map(goal => ({ label: goal.title, val: goal.id }))} label="Associated goal" onChange={setAssociatedGoal} />
                     <button className="text-black" onClick={() => {
-                        if (endDate && startDate)
+                        if (endDate && startDate) {
                             props.handleCreateEvent({
                                 title,
                                 allDay: allDayEvent,
@@ -92,6 +81,7 @@ export function CalendarDialog(props: Props) {
                                 goalId: associatedGoal
 
                             })
+                        }
                     }}>
                         Create event
                     </button>

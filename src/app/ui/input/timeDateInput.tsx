@@ -1,7 +1,7 @@
 type Props = {
   label: string | undefined;
   value: string | undefined;
-  setValue: (event: string) => void;
+  setValue?: (event: string) => void;
 };
 
 export function TimeDateInput({ label, value, setValue }: Props) {
@@ -18,7 +18,8 @@ export function TimeDateInput({ label, value, setValue }: Props) {
         className="text-black"
         name={label}
         defaultValue={value}
-        onChange={(e) => setValue(e.target.value)}
+        disabled={!setValue}
+        onChange={(e) => { if (setValue) setValue(e.target.value) }}
       />
     </>
   );

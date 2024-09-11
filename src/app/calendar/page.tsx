@@ -17,7 +17,7 @@ export default async function calendar() {
         redirect("/")
     }
 
-    const roles = await db.select().from(role).where(eq(role.userId, session.user.id))
+    // const roles = await db.select().from(role).where(eq(role.userId, session.user.id))
     const goals = await db.select().from(goal).where(eq(goal.userId, session.user.id))
     const createCalendarEvent = async (newEvent: CreateCalendarEvent) => {
         "use server";

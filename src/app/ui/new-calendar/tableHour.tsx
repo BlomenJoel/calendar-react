@@ -2,7 +2,7 @@
 import { TableCell, TableRow } from "@/components/ui/table"
 import { SelectedSlot } from "./new-calendar"
 import { cn } from "@/lib/utils"
-import { Dispatch, MutableRefObject, SetStateAction, useCallback } from "react"
+import { Dispatch, MutableRefObject, SetStateAction, useCallback, useState } from "react"
 import { CalendarEvent } from "@/app/utils/types"
 
 type ChildProps = {
@@ -11,11 +11,10 @@ type ChildProps = {
     day: string,
     date: Date,
     selectedSlots: SelectedSlot[],
-    isEventInSlot: boolean;
+    eventInSlot: CalendarEvent | undefined;
     eventLabel?: string | null;
-    eventColor?: string | null;
     eventGoal?: string | null;
-    handleMouseDown: (date: Date, hour: number, minute: number) => void;
+    handleMouseDown: (date: Date, hour: number, minute: number, eventInSlot: CalendarEvent | undefined) => void;
     handleMouseEnter: (date: Date, hour: number, minute: number) => void;
 }
 
@@ -28,13 +27,11 @@ type ParentProps = {
     setSelectedSlots: Dispatch<SetStateAction<SelectedSlot[]>>,
     setIsDragging: (isDragging: boolean) => void,
     startSlotRef: MutableRefObject<SelectedSlot | null>
+    setShowCalendarEvent: Dispatch<SetStateAction<undefined | CalendarEvent>>,
     isDragging: boolean
 }
 
-export function TableHour({ hour, days, currentWeekStart, selectedSlots, events, setSelectedSlots, setIsDragging, startSlotRef, isDragging }: ParentProps) {
-
-
-
+export function TableHour({ hour, days, currentWeekStart, selectedSlots, events, setSelectedSlots, setIsDragging, startSlotRef, isDragging, setShowCalendarEvent }: ParentProps) {
     const getEventInSlot = (slotStart: Date, slotEnd: Date) => {
         return events?.find(event => {
             return slotStart < event.end && slotEnd > event.start
@@ -68,10 +65,14 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
         })
     }, [setSelectedSlots])
 
-    const handleMouseDown = (date: Date, hour: number, minute: number) => {
-        setIsDragging(true)
-        startSlotRef.current = { date, hour, minute }
-        handleSlotSelection(date, hour, minute)
+    const handleMouseDown = (date: Date, hour: number, minute: number, eventInSlot: CalendarEvent | undefined) => {
+        if (eventInSlot) {
+            setShowCalendarEvent(eventInSlot)
+        } else {
+            setIsDragging(true)
+            startSlotRef.current = { date, hour, minute }
+            handleSlotSelection(date, hour, minute)
+        }
     }
 
     const handleMouseEnter = (date: Date, hour: number, minute: number) => {
@@ -124,8 +125,7 @@ export function TableHour({ hour, days, currentWeekStart, selectedSlots, events,
                             const eventGoal = getEventsGoal(eventInSlot, slotStart)
                             return (
                                 <HourTableCell
-                                    eventColor={eventInSlot?.goalColor}
-                                    isEventInSlot={!!eventInSlot}
+                                    eventInSlot={eventInSlot}
                                     eventGoal={eventGoal}
                                     eventLabel={eventLabel}
                                     hour={hour}
@@ -151,16 +151,16 @@ const HourTableCell = (props: ChildProps) => {
         <div
             key={`${props.day}-${props.hour}-${props.minute}`}
             className={cn(
-                "w-full h-1/2 relative z-10",
+                "w-full h-1/2 relative z-10 p-1 overflow-hidden",
                 props.selectedSlots.some(slot =>
                     slot.date.getTime() === props.date.getTime() &&
                     slot.hour === props.hour &&
                     slot.minute === props.minute
                 ) && "bg-primary/20",
-                props.isEventInSlot && "bg-blue-500"
+                props.eventInSlot && "bg-blue-500"
             )}
-            style={props.eventColor ? { backgroundColor: props.eventColor } : undefined}
-            onMouseDown={() => props.handleMouseDown(props.date, props.hour, props.minute)}
+            style={props.eventInSlot?.goalColor ? { backgroundColor: props.eventInSlot.goalColor } : undefined}
+            onMouseDown={() => props.handleMouseDown(props.date, props.hour, props.minute, props.eventInSlot)}
             onMouseEnter={() => props.handleMouseEnter(props.date, props.hour, props.minute)}
             aria-selected={props.selectedSlots.some(slot =>
                 slot.date.getTime() === props.date.getTime() &&
@@ -169,16 +169,6 @@ const HourTableCell = (props: ChildProps) => {
             )}
         >
             {props.eventLabel && <h2>{props.eventLabel}</h2>}
-            {props.eventGoal && props.eventColor &&
-                <div className={`-z-10 absolute -top-7 -right-28`}>
-                    <div
-                        style={{ backgroundColor: props.eventColor }}
-                        className={`rotate-90 origin-left text-xs pb-6 p-1 h-14 w-24 rounded-lg`}
-                    >
-                        {props.eventGoal}
-                    </div>
-                </div>
-            }
         </div>
     )
 }
