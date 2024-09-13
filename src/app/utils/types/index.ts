@@ -9,6 +9,7 @@ export type CalendarEvent = {
     start: Date;
     end: Date;
     title: string;
+    completed: boolean;
     allDay: boolean;
     goalId: string | null;
     goalTitle: string | null;

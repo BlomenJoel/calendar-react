@@ -10,6 +10,7 @@ import { randomUUID } from "crypto"
 export const event = pgTable('event', {
   id: uuid('id').defaultRandom().primaryKey(),
   goalId: uuid('goalId'),
+  completed: boolean("completed").notNull().default(false),
   title: varchar("title").notNull(),
   start: timestamp('start', { withTimezone: true }).notNull(),
   end: timestamp('end', { withTimezone: true }).notNull(),

@@ -26,6 +26,8 @@
 
 &#x2611; Add view of event
 
+&#x2610; Add completed state to events
+
 &#x2610; Mobil anpassa
 
 &#x2610; Reconsider data fetching, add a loading state client side. So slow now.

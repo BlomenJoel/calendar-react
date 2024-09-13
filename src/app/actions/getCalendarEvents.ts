@@ -16,6 +16,7 @@ const getCalendarEvents = async ({ startOfWeek, endOfWeek }: Props): Promise<Cal
     allDay: event.allDay,
     goalId: event.goalId,
     goalTitle: goal.title,
+    completed: event.completed,
     goalColor: goal.color
 }).from(event)
     .leftJoin(goal, eq(goal.id, event.goalId))

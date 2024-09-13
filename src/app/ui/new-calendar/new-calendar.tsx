@@ -12,6 +12,7 @@ import { getCalendarEvents } from "@/app/actions/getCalendarEvents"
 import { CalendarShowDialog } from "./show-dialog"
 import { AllDayEvents } from "./all-day-events"
 import { DisplayDates } from "./display-dates"
+import { updateCalendarEvents } from "@/app/actions/updateCalendarEvents"
 
 export type SelectedSlot = {
   date: Date
@@ -88,6 +89,12 @@ export default function NewCalendarTable({ goals, createCalendarEvent }: Props) 
     setSelectedSlots([])
   }
 
+  const handleUpdateCalendarEvent = async (updatedCalendarEvent: CalendarEvent) => {
+    const res = await updateCalendarEvents(updatedCalendarEvent)
+    refetchCalendarEvents()
+    return res
+  }
+
   const handleCreateEvent = async ({ ...data }: typeof event.$inferInsert) => {
     await createCalendarEvent({
       title: data.title,
@@ -146,6 +153,7 @@ export default function NewCalendarTable({ goals, createCalendarEvent }: Props) 
       }
       {showCalendarEvent &&
         <CalendarShowDialog
+          handleUpdateCalendarEvent={handleUpdateCalendarEvent}
           setIsPopupOpen={setShowCalendarEvent}
           calendarEvent={showCalendarEvent}
         />

@@ -39,7 +39,7 @@ export const AllDayEvents = ({ days, currentWeekStart, calendarEvents, setShowCa
                                 <div
                                     onClick={() => { setShowCalendarEvent(event) }}
                                     key={event.id}
-                                    className="bg-blue-500 text-white p-1 mb-1 text-xs rounded cursor-pointer"
+                                    className={cn('bg-blue-500 text-white p-1 mb-1 text-xs rounded cursor-pointer', event.completed && 'line-through')}
                                     style={event.goalColor ? { backgroundColor: event.goalColor } : {}}
                                     title={event.title}
                                 >
