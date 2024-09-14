@@ -6,16 +6,15 @@ import { Button } from "../ui/button";
 import { ProgressBar } from "../ui/progress-bar";
 import { createUserProfile } from "../actions/signup";
 import { useRouter } from "next/navigation";
-import { Goal, ProgressValues } from "../utils/types";
+import { Goal, ProgressValues, Role } from "../utils/types";
 import { useSession } from "next-auth/react"
-import ColorPicker from "../ui/colorPicker";
 
 const LAST_STEP = 3
 
 export default function SignUp() {
     const { data: session } = useSession()
     const [goals, setGoals] = useState<Goal[]>([])
-    const [roles, setRoles] = useState([""])
+    const [roles, setRoles] = useState<Role[]>([])
     const [pms, setPMS] = useState("")
     const [progress, setProgress] = useState<ProgressValues>("1/4")
     const [step, setStep] = useState(0)
@@ -23,12 +22,19 @@ export default function SignUp() {
     const router = useRouter()
 
     const handleSetGoal = (newVal: string, index: number, key: keyof Goal) => {
-        goals[index][key] = newVal
-        setGoals(goals)
+        const updatedGoals = [...goals];
+        const updatedGoal = { ...updatedGoals[index] };
+        updatedGoal[key] = newVal;
+        updatedGoals[index] = updatedGoal;
+        setGoals(updatedGoals);
     }
-    const handleSetRoleValues = (newVal: string, index: number) => {
-        roles[index] = newVal
-        setRoles(roles)
+    
+    const handleSetRoleValues = (newVal: string, index: number, key: keyof Role) => {
+        const updatedRoles = [...roles];
+        const updatedRole = { ...updatedRoles[index] };
+        updatedRole[key] = newVal;
+        updatedRoles[index] = updatedRole;
+        setRoles(updatedRoles);
     }
 
     const handleContinue = async () => {
@@ -63,10 +69,11 @@ export default function SignUp() {
                     </div>
                 }
                 {step === 1 &&
-                    <div className="w-full">                 <div className="flex flex-col gap-4 text-center">
-                        ¨                   <h1>Personal mission statement</h1>
-                        <p>Fyll i ditt PMS om du har ett! Annars går det bra att göra det senare.</p>
-                    </div>
+                    <div className="w-full">
+                        <div className="flex flex-col gap-4 text-center">
+                            <h1>Personal mission statement</h1>
+                            <p>Fyll i ditt PMS om du har ett! Annars går det bra att göra det senare.</p>
+                        </div>
                         <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2">
                             <Input.Text label="" value={pms} setValue={(newVal) => setPMS(newVal)} />
                         </div>
@@ -75,14 +82,15 @@ export default function SignUp() {
                 {step === 2 &&
                     <div className="w-full">
                         <div className="flex flex-col gap-4 text-center">
-                            ¨                   <h1>Roller</h1>
+                            <h1>Roller</h1>
                             <p>Vad är dina övergripliga roller?</p>
                         </div>
                         <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
-                            {/* TODO: Add description! */}
-                            {roles.map((role, index) => <Input.Text key={index} label="" value={role} setValue={(newVal) => handleSetRoleValues(newVal, index)} />)}
+                            {roles.map((role, index) =>
+                                <Input.Role handleSetRoleValues={handleSetRoleValues} index={index} role={role} />
+                            )}
                             <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
-                                <Button.Primary onClick={() => setRoles([...roles, ""])} title="+" />
+                                <Button.Primary onClick={() => setRoles([...roles, { description: '', id: '', title: '', userId: '' }])} title="+" />
                             </div>
                         </div>
                     </div>
@@ -95,14 +103,10 @@ export default function SignUp() {
                         </div>
                         <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
                             {goals.map((g, index) =>
-                                <div key={index}>
-                                    <Input.Text label="" value={g.title} setValue={(newVal) => handleSetGoal(newVal, index, "title")} />
-                                    <Input.Text label="" value={g.description} setValue={(newVal) => handleSetGoal(newVal, index, "description")} />
-                                    <ColorPicker color={g.color} setColor={(newVal) => handleSetGoal(newVal, index, "color")} />
-                                </div>
+                                <Input.Goal goal={g} handleSetGoal={handleSetGoal} index={index} />
                             )}
                             <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
-                                <Button.Primary onClick={() => setGoals([...goals, { color: "", description: "", id: "", title: "", userId: "" }])} title="+" />
+                                <Button.Primary onClick={() => setGoals([...goals, { color: "", description: "", id: "", title: "", userId: "", roleId: '' }])} title="+" />
                             </div>
                         </div>
                     </div>

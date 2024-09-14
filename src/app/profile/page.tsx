@@ -5,7 +5,7 @@ import { db } from "../../../lib/db"
 import { goal, role } from "../../../lib/schemas"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
-import { GoalDiv, RoleDiv } from "../ui/profile"
+import { Wrapper } from "../ui/profile"
 import { authOptions } from "../utils/authOptions"
 
 type InsertGoal = typeof goal.$inferInsert
@@ -34,8 +34,26 @@ export default async function profile() {
             console.warn(err)
         }
     }
-    const goals = await db.select().from(goal).where(eq(goal.userId, session.user.id))
-    const roles = await db.select().from(role).where(eq(role.userId, session.user.id))
+    // ADD ERROR HANDLING
+    const handleCreateRole = async (newRole: InsertRole) => {
+        "use server";
+        try {
+            await db.insert(role).values({ ...newRole, userId: session.user.id, id: undefined }).returning({ createdId: role.id })
+        } catch (err) {
+            console.warn(err)
+        }
+    }
+
+    // ADD ERROR HANDLING
+    const handleCreateGoal = async (newGoal: InsertGoal) => {
+        "use server";
+        try {
+            console.log({ newGoal })
+            await db.insert(goal).values({ ...newGoal, userId: session.user.id }).returning({ createdId: goal.id })
+        } catch (err) {
+            console.warn(err)
+        }
+    }
 
     return (
         <div className="w-1/2 mx-auto">
@@ -44,22 +62,7 @@ export default async function profile() {
                 <div>
                     <h3>Personal mission statement</h3>
                 </div>
-                <div>
-                    <h3>Goals</h3>
-                    <div className="flex flex-col gap-2">
-                        {goals.map(goal =>
-                            <GoalDiv goal={goal} updateGoal={updateGoal} key={goal.id} />
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <h3>Roles</h3>
-                    <div className="flex flex-col gap-2">
-                        {roles.map(role =>
-                            <RoleDiv role={role} updateRole={updateRole} key={role.id} />
-                        )}
-                    </div>
-                </div>
+                <Wrapper handleCreateGoal={handleCreateGoal} handleCreateRole={handleCreateRole} updateGoal={updateGoal} updateRole={updateRole} />
             </div>
 
         </div>

@@ -23,7 +23,8 @@ export const role = pgTable("role", {
   userId: uuid("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  title: varchar("title").notNull()
+  title: varchar("title").notNull(),
+  description: varchar("description")
 })
 
 export const goal = pgTable("goal", {
@@ -31,6 +32,9 @@ export const goal = pgTable("goal", {
   userId: uuid("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+  roleId: uuid("roleId")
+    .notNull()
+    .references(() => role.id, { onDelete: "cascade" }), // This defines the one-to-many relationship
   title: varchar("title").notNull(),
   description: varchar("description").notNull(),
   color: varchar("color").notNull(),

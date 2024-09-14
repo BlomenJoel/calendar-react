@@ -26,7 +26,11 @@
 
 &#x2611; Add view of event
 
-&#x2610; Add completed state to events
+&#x2611; Add completed state to events
+
+&#x2611; Connect role with goal
+
+&#x2610; Move color selection to role.
 
 &#x2610; Mobil anpassa
 

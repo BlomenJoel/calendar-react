@@ -36,6 +36,20 @@
       "when": 1726188806045,
       "tag": "0004_polite_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1726191010050,
+      "tag": "0005_worried_rocket_racer",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1726192478435,
+      "tag": "0006_normal_owl",
+      "breakpoints": true
     }
   ]
 }
