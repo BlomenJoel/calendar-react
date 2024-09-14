@@ -20,7 +20,7 @@ const updateCalendarEvents = async (newEvent: CalendarEvent): Promise<CalendarEv
     if (res.length === 1) {
         return ({
             ...res[0],
-            goalColor: newEvent.goalColor,
+            color: newEvent.color,
             goalTitle: newEvent.goalTitle
         })
     }

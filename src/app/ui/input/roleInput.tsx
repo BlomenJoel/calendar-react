@@ -1,5 +1,6 @@
 import { Role } from "@/app/utils/types";
 import { Input } from ".";
+import ColorPicker from "../colorPicker";
 
 type Props = {
     handleSetRoleValues: (newVal: string, index: number, key: keyof Role) => void;
@@ -14,6 +15,7 @@ export function RoleInput({ handleSetRoleValues, index, role }: Props) {
             <div>
                 <Input.Text key={index} label="Description" value={role.description || ""} setValue={(newVal) => handleSetRoleValues(newVal, index, 'description')} />
             </div>
+            <ColorPicker color={role.color} setColor={(newVal) => handleSetRoleValues(newVal, index, "color")} />
         </div>
 
     );

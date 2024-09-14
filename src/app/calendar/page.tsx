@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth"
 import { redirect } from 'next/navigation'
 import { authOptions } from '../utils/authOptions'
 import { NewCalendar } from '../ui/new-calendar'
+import { getGoals } from '../actions/getGoals'
 
 type CreateCalendarEvent = typeof event.$inferInsert
 
@@ -18,7 +19,7 @@ export default async function calendar() {
     }
 
     // const roles = await db.select().from(role).where(eq(role.userId, session.user.id))
-    const goals = await db.select().from(goal).where(eq(goal.userId, session.user.id))
+    const goals = await getGoals()
     const createCalendarEvent = async (newEvent: CreateCalendarEvent) => {
         "use server";
         await db.insert(event).values(newEvent)

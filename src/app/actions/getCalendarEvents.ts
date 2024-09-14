@@ -1,6 +1,6 @@
 "use server"
 import { db } from "../../../lib/db";
-import { event, goal } from "../../../lib/schemas";
+import { event, goal, role } from "../../../lib/schemas";
 import { CalendarEvent } from "../utils/types";
 import { and, eq, gte, lte, or } from "drizzle-orm";
 
@@ -17,9 +17,10 @@ const getCalendarEvents = async ({ startOfWeek, endOfWeek }: Props): Promise<Cal
     goalId: event.goalId,
     goalTitle: goal.title,
     completed: event.completed,
-    goalColor: goal.color
+    color: role.color
 }).from(event)
     .leftJoin(goal, eq(goal.id, event.goalId))
+    .leftJoin(role, eq(role.id, goal.roleId))
     .orderBy(event.start)
     .where(
         or(

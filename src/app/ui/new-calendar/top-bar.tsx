@@ -1,9 +1,9 @@
 'use client'
-import { CalendarEvent, Goal } from "@/app/utils/types"
+import { CalendarEvent, Goal, GoalWithColor } from "@/app/utils/types"
 import { VisualizeGoal } from "../visualizeGoal"
 
 type Props = {
-    goals: Goal[]
+    goals: GoalWithColor[]
 }
 
 export default function TopBar({ goals }: Props) {
@@ -20,7 +20,6 @@ export default function TopBar({ goals }: Props) {
                     <h2 className='font-bold text-sm'>GOALS</h2>
                     <div className='flex flex-col gap-1'>
                         {goals.map((goal, index) =>
-
                             <VisualizeGoal key={index} title={goal.title} description={goal.description} color={goal.color} />
                         )}
                     </div>

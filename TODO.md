@@ -30,7 +30,7 @@
 
 &#x2611; Connect role with goal
 
-&#x2610; Move color selection to role.
+&#x2611; Move color selection to role.
 
 &#x2610; Mobil anpassa
 

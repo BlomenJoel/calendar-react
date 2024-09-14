@@ -159,7 +159,7 @@ const HourTableCell = (props: ChildProps) => {
                 ) && "bg-primary/20",
                 props.eventInSlot && "bg-blue-500"
             )}
-            style={props.eventInSlot?.goalColor ? { backgroundColor: props.eventInSlot.goalColor } : undefined}
+            style={props.eventInSlot?.color ? { backgroundColor: props.eventInSlot.color } : undefined}
             onMouseDown={() => props.handleMouseDown(props.date, props.hour, props.minute, props.eventInSlot)}
             onMouseEnter={() => props.handleMouseEnter(props.date, props.hour, props.minute)}
             aria-selected={props.selectedSlots.some(slot =>

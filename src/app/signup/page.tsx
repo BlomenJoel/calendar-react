@@ -28,7 +28,7 @@ export default function SignUp() {
         updatedGoals[index] = updatedGoal;
         setGoals(updatedGoals);
     }
-    
+
     const handleSetRoleValues = (newVal: string, index: number, key: keyof Role) => {
         const updatedRoles = [...roles];
         const updatedRole = { ...updatedRoles[index] };
@@ -87,10 +87,10 @@ export default function SignUp() {
                         </div>
                         <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
                             {roles.map((role, index) =>
-                                <Input.Role handleSetRoleValues={handleSetRoleValues} index={index} role={role} />
+                                <Input.Role key={index} handleSetRoleValues={handleSetRoleValues} index={index} role={role} />
                             )}
                             <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
-                                <Button.Primary onClick={() => setRoles([...roles, { description: '', id: '', title: '', userId: '' }])} title="+" />
+                                <Button.Primary onClick={() => setRoles([...roles, { description: '', id: '', title: '', userId: '', color: '' }])} title="+" />
                             </div>
                         </div>
                     </div>
@@ -103,10 +103,10 @@ export default function SignUp() {
                         </div>
                         <div className="flex flex-col p-8 my-4 pb-4 border border-black rounded-xl gap-2 w-full">
                             {goals.map((g, index) =>
-                                <Input.Goal goal={g} handleSetGoal={handleSetGoal} index={index} />
+                                <Input.Goal roles={roles} key={index} goal={g} handleSetGoal={handleSetGoal} index={index} />
                             )}
                             <div className="w-12 mt-4 flex flex-col justify-center mx-auto">
-                                <Button.Primary onClick={() => setGoals([...goals, { color: "", description: "", id: "", title: "", userId: "", roleId: '' }])} title="+" />
+                                <Button.Primary onClick={() => setGoals([...goals, { description: "", id: "", title: "", userId: "", roleId: '' }])} title="+" />
                             </div>
                         </div>
                     </div>

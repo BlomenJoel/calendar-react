@@ -1,6 +1,6 @@
 "use client"
-import { useState } from "react"
-import { Goal, Role } from "../utils/types"
+import { useEffect, useState } from "react"
+import { Goal, GoalWithColor, Role } from "../utils/types"
 import { Button } from "./button"
 import { Input } from "./input"
 import { goal, role } from "../../../lib/schemas"
@@ -9,6 +9,7 @@ import { VisualizeGoal } from "./visualizeGoal"
 import { useQuery } from "@tanstack/react-query"
 import { getGoals } from "../actions/getGoals"
 import { getRoles } from "../actions/getRoles"
+import { GoalInput } from "./input/goalInput"
 
 type InsertGoal = typeof goal.$inferInsert
 type InsertRole = typeof role.$inferInsert
@@ -29,44 +30,55 @@ export const Wrapper = ({ handleCreateGoal, updateGoal, handleCreateRole, update
         queryKey: ['goals'],
         queryFn: () => getGoals()
     })
-    const { data: roles } = useQuery({
+    const { data: roles, refetch: refetchRoles } = useQuery({
         queryKey: ['roles'],
         queryFn: () => getRoles()
     })
-
-
 
     const handleUpdateGoal = async (updatedGoal: InsertGoal) => {
         await updateGoal(updatedGoal)
         refetchGoals()
     }
-    return (
-        <div>
 
-            <div>
-                <h3>Goals</h3>
-                <div className="flex flex-col gap-2">
-                    {goals?.map(goal =>
-                        <EditGoal goal={goal}
-                            updateGoal={handleUpdateGoal}
-                            key={goal.id} />
-                    )}
+    const handleUpdateRole = async (updatedRole: InsertRole) => {
+        await updateRole(updatedRole)
+        refetchGoals()
+        refetchRoles()
+    }
+    return (
+        <div className="flex justify-between w-full">
+            <div className="flex flex-col gap-4">
+                <div className="flex gap-4">
+                    <h3>Goals</h3>
                     <CreateGoal
                         roles={roles}
                         handleCreateGoal={async (newGoal) => {
-                            console.log({ newGoal })
                             await handleCreateGoal(newGoal)
                             refetchGoals()
-                        }} />
+                        }}
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    {goals?.map(goal =>
+                        <EditGoal
+                            goal={goal}
+                            roles={roles}
+                            updateGoal={handleUpdateGoal}
+                            key={goal.id} />
+                    )}
+
                 </div>
             </div>
-            <div>
-                <h3>Roles</h3>
+            <div className="flex flex-col gap-4">
+                <div className="flex gap-4">
+                    <h3>Roles</h3>
+                    <CreateRole handleCreateRole={handleCreateRole} />
+                </div>
+
                 <div className="flex flex-col gap-2">
                     {roles?.map(role =>
-                        <EditRole role={role} updateRole={updateRole} key={role.id} />
+                        <EditRole role={role} updateRole={handleUpdateRole} key={role.id} />
                     )}
-                    <CreateRole handleCreateRole={handleCreateRole} />
                 </div>
 
             </div>
@@ -74,28 +86,28 @@ export const Wrapper = ({ handleCreateGoal, updateGoal, handleCreateRole, update
     )
 }
 
-export const EditGoal = ({ goal, updateGoal }: { goal: Goal } & EditGoalProps) => {
+export const EditGoal = ({ goal, updateGoal, roles }: { goal: GoalWithColor, roles: Role[] | undefined } & EditGoalProps) => {
     const [localGoal, setLocalGoal] = useState(goal)
-    const [color, setColor] = useState("#000000")
     const [edit, setEdit] = useState(false)
 
     const setValue = (newVal: string, key: keyof InsertGoal) => {
         setLocalGoal({ ...localGoal, [key]: newVal })
     }
 
+    useEffect(() => {
+        setLocalGoal(goal)
+    }, [goal])
+
     const save = () => {
         updateGoal(localGoal)
+        setEdit(false)
     }
     return (
         <div>
             <Button.Primary onClick={() => setEdit(true)} title="Edit" disabled={edit} />
             <Button.Primary onClick={save} title="Save" disabled={!edit} />
             {edit ?
-                <div className="bg-white flex flex-col gap-2">
-                    <Input.Text label="Title" setValue={(newVal) => setValue(newVal, "title")} value={localGoal.title} />
-                    <Input.Text label="Description" setValue={(newVal) => setValue(newVal, "description")} value={localGoal.description} />
-                    <ColorPicker setColor={setColor} color={color} />
-                </div>
+                <GoalInput goal={localGoal} handleSetGoal={(newVal, index, key) => setValue(newVal, key)} index={1} roles={roles || []} />
                 :
                 <VisualizeGoal description={localGoal.description} title={localGoal.title} color={localGoal.color} />
             }
@@ -122,10 +134,20 @@ export const EditRole = ({ role, updateRole }: { role: Role } & EditRoleProps) =
             {edit ?
                 <div className="bg-white flex flex-col gap-2">
                     <Input.Text label="Title" setValue={(newVal) => setValue(newVal, "title")} value={localRole.title} />
+                    <div>
+                        <Input.Text label="Description" setValue={(newVal) => setValue(newVal, "description")} value={localRole.description || ''} />
+                    </div>
+                    <ColorPicker color={localRole.color} setColor={(newVal) => setValue(newVal, "color")} />
                 </div>
                 :
-                <div className={`relative rounded-lg w-80 bg-green-400`}>
-                    {localRole.title}
+                <div className={`relative rounded-lg p-4 text-black`} style={localRole.color ? { backgroundColor: localRole.color } : {}}>
+                    <p className="text-black">
+
+                        title: {localRole.title}
+                    </p>
+                    <p className="text-black">
+                        description: {localRole.description}
+                    </p>
                 </div>
             }
         </div>
@@ -134,7 +156,7 @@ export const EditRole = ({ role, updateRole }: { role: Role } & EditRoleProps) =
 
 
 export const CreateRole = ({ handleCreateRole }: CreateRoleProps) => {
-    const [localRole, setLocalRole] = useState<typeof role.$inferInsert>({ description: '', title: '', userId: '' })
+    const [localRole, setLocalRole] = useState<typeof role.$inferInsert>({ description: '', title: '', userId: '', color: "#000000" })
     const [create, setCreate] = useState(false)
 
     const setValue = (newVal: string, key: keyof InsertRole) => {
@@ -153,6 +175,7 @@ export const CreateRole = ({ handleCreateRole }: CreateRoleProps) => {
                     <div>
                         <Input.Text label="Description" setValue={(newVal) => setValue(newVal, "description")} value={localRole.description || ""} />
                     </div>
+                    <ColorPicker setColor={(newVal) => setValue(newVal, "color")} color={localRole.color!} />
                     <Button.Primary onClick={save} title="Save" disabled={!create} />
                 </div>
                 :
@@ -163,7 +186,7 @@ export const CreateRole = ({ handleCreateRole }: CreateRoleProps) => {
 }
 
 export const CreateGoal = ({ handleCreateGoal, roles }: { roles: Role[] | undefined } & CreateGoalProps) => {
-    const [localGoal, setLocalGoal] = useState<typeof goal.$inferInsert>({ description: '', title: '', color: '', roleId: '', userId: '' })
+    const [localGoal, setLocalGoal] = useState<typeof goal.$inferInsert>({ description: '', title: '', roleId: '', userId: '' })
     const [create, setCreate] = useState(false)
 
     const setValue = (newVal: string, index: number, key: keyof Goal) => {

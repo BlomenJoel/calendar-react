@@ -24,7 +24,8 @@ export const role = pgTable("role", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   title: varchar("title").notNull(),
-  description: varchar("description")
+  description: varchar("description"),
+  color: varchar("color").notNull().default('#000000'),
 })
 
 export const goal = pgTable("goal", {
@@ -37,7 +38,6 @@ export const goal = pgTable("goal", {
     .references(() => role.id, { onDelete: "cascade" }), // This defines the one-to-many relationship
   title: varchar("title").notNull(),
   description: varchar("description").notNull(),
-  color: varchar("color").notNull(),
 })
 
 

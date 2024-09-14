@@ -56,9 +56,9 @@ export default async function profile() {
     }
 
     return (
-        <div className="w-1/2 mx-auto">
+        <div className="w-2/3 mx-auto">
             <h1>Profile</h1>
-            <div className="flex flex-row gap-12">
+            <div className="flex flex-col gap-12">
                 <div>
                     <h3>Personal mission statement</h3>
                 </div>
