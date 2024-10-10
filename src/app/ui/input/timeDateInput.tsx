@@ -1,10 +1,12 @@
 type Props = {
   label: string | undefined;
   value: string | undefined;
+  type?: 'datetime-local' | 'date';
   setValue?: (event: string) => void;
 };
 
-export function TimeDateInput({ label, value, setValue }: Props) {
+export function TimeDateInput({ label, value, setValue, type = 'datetime-local'
+}: Props) {
   return (
     <>
       {label && (
@@ -14,7 +16,7 @@ export function TimeDateInput({ label, value, setValue }: Props) {
       )}
       <input
         id={label}
-        type="datetime-local"
+        type={type}
         className="text-black"
         name={label}
         defaultValue={value}
