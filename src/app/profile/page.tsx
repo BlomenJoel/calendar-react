@@ -48,7 +48,7 @@ export default async function profile() {
     const handleCreateGoal = async (newGoal: InsertGoal) => {
         "use server";
         try {
-            console.log({ newGoal })
+            console.log({ newGoal, session })
             await db.insert(goal).values({ ...newGoal, userId: session.user.id }).returning({ createdId: goal.id })
         } catch (err) {
             console.warn(err)

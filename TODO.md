@@ -34,6 +34,14 @@
 
 &#x2610; Mobil anpassa
 
+&#x2611; Add circel valuation thing.
+
+&#x2611; Fix signup.
+
+&#x2610; Fix seeding
+
+&#x2611; Fix creating roles
+
 &#x2610; Reconsider data fetching, add a loading state client side. So slow now.
 
 

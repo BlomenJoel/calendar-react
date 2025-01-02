@@ -5,6 +5,7 @@ import {
   index,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from "next-auth/adapters"
+import { relations } from 'drizzle-orm';
 import { randomUUID } from "crypto"
 
 export const event = pgTable('event', {
@@ -17,6 +18,28 @@ export const event = pgTable('event', {
   allDay: boolean("allDay").notNull(),
 });
 
+export const evaluations = pgTable("evaluations", {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  createdTimestamp: timestamp('timestamp').defaultNow().notNull(),
+  startTimestamp: timestamp('startTimestamp').notNull(),
+  endTimestamp: timestamp('endTimestamp').notNull(),
+});
+
+export const roleScores = pgTable("role_scores", {
+  id: uuid('id').defaultRandom().primaryKey(),
+  evaluationId: uuid('evaluationId')
+    .notNull()
+    .references(() => evaluations.id, { onDelete: "cascade" }),
+  roleId: uuid('roleId')
+    .notNull()
+    .references(() => role.id, { onDelete: "cascade" }),
+  desiredScore: integer('desiredScore').notNull(),
+  currentScore: integer('currentScore').notNull(),
+});
+
 
 export const role = pgTable("role", {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -27,6 +50,21 @@ export const role = pgTable("role", {
   description: varchar("description"),
   color: varchar("color").notNull().default('#000000'),
 })
+
+export const evaluationsRelations = relations(evaluations, ({ many }) => ({
+  roleScores: many(roleScores),
+}));
+
+export const roleScoresRelations = relations(roleScores, ({ one }) => ({
+  evaluation: one(evaluations, {
+    fields: [roleScores.evaluationId],
+    references: [evaluations.id],
+  }),
+  role: one(role, {
+    fields: [roleScores.roleId],
+    references: [role.id],
+  }),
+}));
 
 export const goal = pgTable("goal", {
   id: uuid('id').defaultRandom().primaryKey(),

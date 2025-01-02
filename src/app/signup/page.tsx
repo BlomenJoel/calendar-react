@@ -7,12 +7,15 @@ import { ProgressBar } from "../ui/progress-bar";
 import { createUserProfile } from "../actions/signup";
 import { useRouter } from "next/navigation";
 import { Goal, ProgressValues, Role } from "../utils/types";
-import { useSession } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 
-const LAST_STEP = 3
+const LAST_STEP = 4
 
 export default function SignUp() {
     const { data: session } = useSession()
+    if (!session) {
+        signIn()
+    }
     const [goals, setGoals] = useState<Goal[]>([])
     const [roles, setRoles] = useState<Role[]>([])
     const [pms, setPMS] = useState("")
@@ -38,7 +41,8 @@ export default function SignUp() {
     }
 
     const handleContinue = async () => {
-        if (step === LAST_STEP && session?.user) {
+        console.log('handel contunie', { session }, { step })
+        if (step >= LAST_STEP && session?.user) {
             await createUserProfile({ goals, roles, user: session.user })
             router.push("/calendar")
         } else {
