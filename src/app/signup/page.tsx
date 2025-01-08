@@ -43,7 +43,7 @@ export default function SignUp() {
     const handleContinue = async () => {
         console.log('handel contunie', { session }, { step })
         if (step >= LAST_STEP && session?.user) {
-            await createUserProfile({ goals, roles, user: session.user })
+            await createUserProfile({ goals, roles, user: session.user, personalMissionStatement: pms })
             router.push("/calendar")
         } else {
             setStep(step + 1)

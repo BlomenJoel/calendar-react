@@ -8,6 +8,13 @@ import type { AdapterAccount } from "next-auth/adapters"
 import { relations } from 'drizzle-orm';
 import { randomUUID } from "crypto"
 
+export const profiles = pgTable('profile', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  personalMissionStatement: text('personalmissionstatement')
+});
 export const event = pgTable('event', {
   id: uuid('id').defaultRandom().primaryKey(),
   goalId: uuid('goalId'),

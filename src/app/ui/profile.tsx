@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getGoals } from "../actions/getGoals"
 import { getRoles } from "../actions/getRoles"
 import { GoalInput } from "./input/goalInput"
+import { getProfile } from "../actions/getProfile"
 
 type InsertGoal = typeof goal.$inferInsert
 type InsertRole = typeof role.$inferInsert
@@ -34,6 +35,10 @@ export const Wrapper = ({ handleCreateGoal, updateGoal, handleCreateRole, update
         queryKey: ['roles'],
         queryFn: () => getRoles()
     })
+    const { data: profile } = useQuery({
+        queryKey: ['profile'],
+        queryFn: () => getProfile()
+    })
 
     const handleUpdateGoal = async (updatedGoal: InsertGoal) => {
         await updateGoal(updatedGoal)
@@ -46,41 +51,49 @@ export const Wrapper = ({ handleCreateGoal, updateGoal, handleCreateRole, update
         refetchRoles()
     }
     return (
-        <div className="flex justify-between w-full">
-            <div className="flex flex-col gap-4">
-                <div className="flex gap-4">
-                    <h3>Goals</h3>
-                    <CreateGoal
-                        roles={roles}
-                        handleCreateGoal={async (newGoal) => {
-                            await handleCreateGoal(newGoal)
-                            refetchGoals()
-                        }}
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    {goals?.map(goal =>
-                        <EditGoal
-                            goal={goal}
-                            roles={roles}
-                            updateGoal={handleUpdateGoal}
-                            key={goal.id} />
-                    )}
+        <div className="flex flex-col gap-12">
 
-                </div>
+            <div>
+                <h3>Personal mission statement</h3>
+                <p>{JSON.stringify(profile)}</p>
             </div>
-            <div className="flex flex-col gap-4">
-                <div className="flex gap-4">
-                    <h3>Roles</h3>
-                    <CreateRole handleCreateRole={handleCreateRole} />
-                </div>
 
-                <div className="flex flex-col gap-2">
-                    {roles?.map(role =>
-                        <EditRole role={role} updateRole={handleUpdateRole} key={role.id} />
-                    )}
-                </div>
+            <div className="flex justify-between w-full">
+                <div className="flex flex-col gap-4">
+                    <div className="flex gap-4">
+                        <h3>Goals</h3>
+                        <CreateGoal
+                            roles={roles}
+                            handleCreateGoal={async (newGoal) => {
+                                await handleCreateGoal(newGoal)
+                                refetchGoals()
+                            }}
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        {goals?.map(goal =>
+                            <EditGoal
+                                goal={goal}
+                                roles={roles}
+                                updateGoal={handleUpdateGoal}
+                                key={goal.id} />
+                        )}
 
+                    </div>
+                </div>
+                <div className="flex flex-col gap-4">
+                    <div className="flex gap-4">
+                        <h3>Roles</h3>
+                        <CreateRole handleCreateRole={handleCreateRole} />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        {roles?.map(role =>
+                            <EditRole role={role} updateRole={handleUpdateRole} key={role.id} />
+                        )}
+                    </div>
+
+                </div>
             </div>
         </div>
     )

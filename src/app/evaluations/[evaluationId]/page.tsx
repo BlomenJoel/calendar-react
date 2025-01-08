@@ -13,7 +13,7 @@ export default async function profile({ params }: { params: { evaluationId: stri
     }
     console.log({ params })
     return (
-        <div className="w-2/3 mx-auto">
+        <div className="w-3/4 mx-auto">
             <SegmentedCircle evaluationId={params.evaluationId} />
         </div>
     )

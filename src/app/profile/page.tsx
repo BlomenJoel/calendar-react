@@ -56,15 +56,9 @@ export default async function profile() {
     }
 
     return (
-        <div className="w-2/3 mx-auto">
+        <div className="w-3/4 mr-auto">
             <h1>Profile</h1>
-            <div className="flex flex-col gap-12">
-                <div>
-                    <h3>Personal mission statement</h3>
-                </div>
-                <Wrapper handleCreateGoal={handleCreateGoal} handleCreateRole={handleCreateRole} updateGoal={updateGoal} updateRole={updateRole} />
-            </div>
-
+            <Wrapper handleCreateGoal={handleCreateGoal} handleCreateRole={handleCreateRole} updateGoal={updateGoal} updateRole={updateRole} />
         </div>
     )
 }

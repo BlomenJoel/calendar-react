@@ -1,14 +1,13 @@
 'use server'
 
-import { eq, or, gte, and, lte } from 'drizzle-orm'
 import { db } from '../../../lib/db'
-import { event, goal, role } from '../../../lib/schemas'
-import { SideMenu } from '../ui/side-menu'
+import { event } from '../../../lib/schemas'
 import { getServerSession } from "next-auth"
 import { redirect } from 'next/navigation'
 import { authOptions } from '../utils/authOptions'
 import { NewCalendar } from '../ui/new-calendar'
 import { getGoals } from '../actions/getGoals'
+import { getProfile } from '../actions/getProfile'
 
 type CreateCalendarEvent = typeof event.$inferInsert
 
@@ -25,10 +24,11 @@ export default async function calendar() {
         await db.insert(event).values(newEvent)
     }
 
+    const profile = await getProfile()
+
     return (<div className='flex flex-row p-4'>
-        <SideMenu />
         <div>
-            <NewCalendar.TopBar goals={goals} />
+            <NewCalendar.TopBar goals={goals} profile={profile} />
             <NewCalendar.Table
                 goals={goals}
                 createCalendarEvent={createCalendarEvent}

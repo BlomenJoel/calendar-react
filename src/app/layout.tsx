@@ -4,6 +4,7 @@ import NextAuthProvider from './context/next-auth-provider';
 import "./globals.css";
 import "./test.scss";
 import Providers from "./providers";
+import { Sidebar } from "./ui/side-menu";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,9 +22,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className && 'flex'}>
         <NextAuthProvider>
-          <Providers>{children}</Providers>
+          <div className="mr-4">
+
+            <Sidebar />
+          </div>
+          <Providers>
+            {children}
+          </Providers>
         </NextAuthProvider>
       </body>
     </html>

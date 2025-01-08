@@ -7,6 +7,7 @@ import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
+import { Sidebar } from './ui/side-menu'
 
 function makeQueryClient() {
     return new QueryClient({
@@ -44,6 +45,8 @@ export default function Providers({ children }: any) {
     const queryClient = getQueryClient()
 
     return (
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+            {children}
+        </QueryClientProvider>
     )
 }

@@ -200,7 +200,7 @@ export default function SegmentedCircle({ evaluationId }: { evaluationId: string
         evaluationId: newEvaluationId,
 
       })))
-      router.push(`/evaluation/${newEvaluationId}`)
+      router.push(`/evaluations/${newEvaluationId}`)
     }
     else if (roles && startDate && endDate) {
       updateEvaluations(roles.map((role, index) => ({

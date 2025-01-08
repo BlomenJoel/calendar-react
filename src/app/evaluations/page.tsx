@@ -24,7 +24,7 @@ export default async function profile() {
         .where(lt(evaluations.createdTimestamp, new Date())); // Replace with the desired timestamp
 
     return (
-        <div className="w-2/3 mx-auto">
+        <div className="w-3/4 mx-auto">
             <h1>Evaluation</h1>
             <div><h2>Previous evaluations</h2>
                 {prevEvals.map((pre, index) =>
@@ -35,13 +35,13 @@ export default async function profile() {
                             <br />
                             start: {getDate(pre.evaluation.startTimestamp)}
                         </p>
-                        <a href={`/evaluation/${pre.evaluation.id}`}>
+                        <a href={`/evaluations/${pre.evaluation.id}`}>
                             Show
                         </a>
                     </div>
                 )}
             </div>
-            <a href={`/evaluation/new`}>
+            <a href={`/evaluations/new`}>
                 Create new
             </a>
         </div>
