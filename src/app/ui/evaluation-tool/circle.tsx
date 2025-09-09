@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 type Score = {
   current: number;
   desired: number;
+  comment: string | null;
 }
 
 const hasScores = (role: Role | RoleWithScores): role is RoleWithScores => !!(role as RoleWithScores).roleScores
@@ -33,7 +34,7 @@ export default function SegmentedCircle({ evaluationId }: { evaluationId: string
     }
   })
   const [scores, setScores] = useState<Score[]>([
-    { current: 0, desired: 0 }
+    { current: 0, desired: 0, comment: '' }
   ])
 
   useEffect(() => {
@@ -43,11 +44,11 @@ export default function SegmentedCircle({ evaluationId }: { evaluationId: string
         setStartDate(getDate(someRole.roleScores.evaluation.startTimestamp))
         setEndDate(getDate(someRole.roleScores.evaluation.endTimestamp))
         setScores(roles.map((role, index) => {
-          return ({ current: (role as RoleWithScores).roleScores.currentScore, desired: (role as RoleWithScores).roleScores.desiredScore })
+          return ({ current: (role as RoleWithScores).roleScores.currentScore, desired: (role as RoleWithScores).roleScores.desiredScore, comment: (role as RoleWithScores).roleScores.comment })
         }))
       } else {
         setScores(roles.map((role, index) => {
-          return ({ current: 0, desired: 0 })
+          return ({ current: 0, desired: 0, comment: '' })
         }))
       }
     }
@@ -184,10 +185,15 @@ export default function SegmentedCircle({ evaluationId }: { evaluationId: string
       return updatedScores
     })
   }
+  const handleCommentChange = (index: number, newVal: string) => {
+    setScores(prevScores => {
+      const updatedScores = [...prevScores]
+      updatedScores[index] = { ...updatedScores[index], comment: newVal }
+      return updatedScores
+    })
+  }
 
   const saveEvaluation = async () => {
-
-
     if (evaluationId === "new" && roles && endDate && startDate) {
       const newEvaluationId = await insertEvaluation({
         endTimestamp: new Date(endDate),
@@ -196,6 +202,7 @@ export default function SegmentedCircle({ evaluationId }: { evaluationId: string
       insertScore(roles.map((role, index) => ({
         currentScore: scores[index].current,
         desiredScore: scores[index].desired,
+        comment: scores[index].comment,
         roleId: role.id,
         evaluationId: newEvaluationId,
 
@@ -207,6 +214,7 @@ export default function SegmentedCircle({ evaluationId }: { evaluationId: string
         ...(role as RoleWithScores).roleScores,
         currentScore: scores[index].current,
         desiredScore: scores[index].desired,
+        comment: scores[index].comment,
         endTimestamp: new Date(endDate),
         startTimestamp: new Date(startDate)
       })))
@@ -272,6 +280,7 @@ export default function SegmentedCircle({ evaluationId }: { evaluationId: string
                   onValueChange={(value) => handleScoreChange(index, 'desired', value)}
                 />
               </div>
+              <Input.Text label='Comment' setValue={(newVal) => handleCommentChange(index, newVal)} value={scores[index]?.comment || ''} />
             </div>
           ))}
           <Button.Primary onClick={saveEvaluation} title='Save evaluation' />

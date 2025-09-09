@@ -45,6 +45,7 @@ export const roleScores = pgTable("role_scores", {
     .references(() => role.id, { onDelete: "cascade" }),
   desiredScore: integer('desiredScore').notNull(),
   currentScore: integer('currentScore').notNull(),
+  comment: text('comment'),
 });
 
 
