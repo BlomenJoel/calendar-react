@@ -24,8 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className && 'flex'}>
         <NextAuthProvider>
-          <div className="mr-4">
-
+          <div className="lg:mr-4">
             <Sidebar />
           </div>
           <Providers>

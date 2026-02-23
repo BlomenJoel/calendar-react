@@ -26,21 +26,11 @@ export function Sidebar() {
         setSidebarState(current => current === 'expanded' ? 'collapsed' : 'expanded')
     }
 
-    useEffect(() => {
-        const handleResize = () => {
-            setSidebarState(window.innerWidth < 768 ? 'collapsed' : 'expanded')
-        }
-
-        window.addEventListener('resize', handleResize)
-        handleResize()
-        return () => window.removeEventListener('resize', handleResize)
-    }, [])
-
     return (
         <>
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="fixed left-4 top-4 z-40 md:hidden">
+                    <Button variant="outline" size="icon" className="fixed left-4 top-4 z-40 lg:hidden">
                         <Menu className="h-6 w-6" />
                         <span className="sr-only">Toggle Menu</span>
                     </Button>
@@ -65,7 +55,7 @@ export function Sidebar() {
                 </SheetContent>
             </Sheet>
             <aside className={cn(
-                "sticky top-0 z-30 flex h-screen flex-col transition-all duration-300",
+                "hidden lg:flex sticky top-0 z-30 h-screen flex-col transition-all duration-300",
                 sidebarState === 'collapsed' ? "w-[60px]" : "w-[240px]"
             )}>
                 <ScrollArea className="flex-1">
@@ -86,7 +76,7 @@ export function Sidebar() {
                         ))}
                     </nav>
                 </ScrollArea>
-                <div className="p-2 border-t">
+                <div className="hidden lg:block p-2 border-t">
                     <Button
                         variant="ghost"
                         size="sm"
